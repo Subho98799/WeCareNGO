@@ -1,0 +1,121 @@
+{
+  "totalFiles": 23,
+  "totalBytes": 13965812,
+  "copied": [
+    {
+      "from": "/photos/01-c-ffn9xv27m.jpg",
+      "to": "/site-media/photos/01-c-ffn9xv27m.jpg",
+      "bytes": 166989
+    },
+    {
+      "from": "/photos/07-dh1cf3boaim.jpg",
+      "to": "/site-media/photos/07-dh1cf3boaim.jpg",
+      "bytes": 167656
+    },
+    {
+      "from": "/photos/106-c9ksif4pmgu.jpg",
+      "to": "/site-media/photos/106-c9ksif4pmgu.jpg",
+      "bytes": 214608
+    },
+    {
+      "from": "/photos/113-c1z-lomicfb.jpg",
+      "to": "/site-media/photos/113-c1z-lomicfb.jpg",
+      "bytes": 100443
+    },
+    {
+      "from": "/photos/115-c1oyejwvejw.jpg",
+      "to": "/site-media/photos/115-c1oyejwvejw.jpg",
+      "bytes": 80393
+    },
+    {
+      "from": "/photos/12-dwcsdbhe1vr.jpg",
+      "to": "/site-media/photos/12-dwcsdbhe1vr.jpg",
+      "bytes": 226838
+    },
+    {
+      "from": "/photos/131-c4vjxktvycy.jpg",
+      "to": "/site-media/photos/131-c4vjxktvycy.jpg",
+      "bytes": 178606
+    },
+    {
+      "from": "/photos/134-c7cdq19vk1j.jpg",
+      "to": "/site-media/photos/134-c7cdq19vk1j.jpg",
+      "bytes": 195564
+    },
+    {
+      "from": "/photos/143-ctcdvvbmzg1.jpg",
+      "to": "/site-media/photos/143-ctcdvvbmzg1.jpg",
+      "bytes": 121143
+    },
+    {
+      "from": "/photos/163-dwcsdbhe1vr.jpg",
+      "to": "/site-media/photos/163-dwcsdbhe1vr.jpg",
+      "bytes": 226838
+    },
+    {
+      "from": "/photos/196-dkpitkvie-c.jpg",
+      "to": "/site-media/photos/196-dkpitkvie-c.jpg",
+      "bytes": 167547
+    },
+    {
+      "from": "/photos/197-dkpitkvie-c.jpg",
+      "to": "/site-media/photos/197-dkpitkvie-c.jpg",
+      "bytes": 57822
+    },
+    {
+      "from": "/photos/24-ctcdvvbmzg1.jpg",
+      "to": "/site-media/photos/24-ctcdvvbmzg1.jpg",
+      "bytes": 121143
+    },
+    {
+      "from": "/photos/35-dkpitkvie-c.jpg",
+      "to": "/site-media/photos/35-dkpitkvie-c.jpg",
+      "bytes": 167547
+    },
+    {
+      "from": "/photos/36-dkpitkvie-c.jpg",
+      "to": "/site-media/photos/36-dkpitkvie-c.jpg",
+      "bytes": 57822
+    },
+    {
+      "from": "/photos/41-ddfmqrwvoxd.jpg",
+      "to": "/site-media/photos/41-ddfmqrwvoxd.jpg",
+      "bytes": 155641
+    },
+    {
+      "from": "/photos/44-c3kgncwpakn.jpg",
+      "to": "/site-media/photos/44-c3kgncwpakn.jpg",
+      "bytes": 104214
+    },
+    {
+      "from": "/photos/76-c5dyzlspl58.jpg",
+      "to": "/site-media/photos/76-c5dyzlspl58.jpg",
+      "bytes": 212984
+    },
+    {
+      "from": "/photos/99-c1hj29kprr2.jpg",
+      "to": "/site-media/photos/99-c1hj29kprr2.jpg",
+      "bytes": 250585
+    },
+    {
+      "from": "/videos/153-ctcdvvbmzg1.mp4",
+      "to": "/site-media/videos/153-ctcdvvbmzg1.mp4",
+      "bytes": 7860359
+    },
+    {
+      "from": "/videos/201-dkpitkvie-c.mp4",
+      "to": "/site-media/videos/201-dkpitkvie-c.mp4",
+      "bytes": 833410
+    },
+    {
+      "from": "/videos/33-ctcdvvbmzg1.mp4",
+      "to": "/site-media/videos/33-ctcdvvbmzg1.mp4",
+      "bytes": 1464250
+    },
+    {
+      "from": "/videos/40-dkpitkvie-c.mp4",
+      "to": "/site-media/videos/40-dkpitkvie-c.mp4",
+      "bytes": 833410
+    }
+  ]
+}

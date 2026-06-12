@@ -1,0 +1,42 @@
+# Ignore everything by default.
+*
+
+# Keep Git config files.
+!.gitignore
+
+# App source.
+!app/
+!app/**
+!content/
+!content/**
+
+# Deploy-safe public media only.
+!public/
+public/*
+!public/site-media/
+!public/site-media/**
+
+# Project config and package files.
+!next-env.d.ts
+!next.config.mjs
+!package.json
+!package-lock.json
+!postcss.config.mjs
+!tsconfig.json
+
+# Always keep private and generated files out of Git.
+.env*
+node_modules/
+.next/
+out/
+dist/
+data/
+scripts/
+screenshots/
+logs/
+.npm-cache/
+.vercel/
+.claude/
+chrome-profile/
+debug.log
+skills-lock.json

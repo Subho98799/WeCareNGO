@@ -1,0 +1,26 @@
+export const brand = {
+  name: "WeCare NGO",
+  hindiLine: "We care, and we show up.",
+  city: "Bhopal, India",
+  businessType: "Nonprofit organization",
+  instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/wecareorgg/",
+  donationUrl: "https://linktr.ee/wecareorgg",
+  volunteerUrl: "https://linktr.ee/wecareorgg",
+  contactEmail: "wecareorgg@gmail.com",
+  contactPhone: "",
+  primaryButtonLabel: "Donate now",
+  secondaryButtonLabel: "Volunteer with us",
+  colors: {
+    ink: "#1e3027",
+    paper: "#fffdf7",
+    leaf: "#5fa76f",
+    sun: "#f1c84b",
+    rose: "#b85348",
+    blue: "#4d7896",
+  },
+  socialProof: {
+    instagramFollowers: "2,165",
+    instagramPosts: "150",
+    yearsActive: "5",
+  },
+};
