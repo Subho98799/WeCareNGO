@@ -101,8 +101,13 @@ function Header() {
     <header className="fixed left-0 right-0 top-0 z-50 px-3 py-3">
       <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/60 bg-white/78 px-3 py-2 shadow-[0_18px_60px_rgba(23,35,27,0.12)] backdrop-blur-xl">
         <a className="focus-ring flex items-center gap-3 rounded-full pr-2" href="#top">
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--leaf)] text-sm font-black text-white">
-            WC
+          <span className="relative h-14 w-14 overflow-hidden">
+            <Image
+              src="/site-media/photos/Logo.PNG"
+              alt="WeCare NGO logo"
+              fill
+              className="object-contain"
+            />
           </span>
           <span className="hidden text-sm font-black sm:block">{brand.name}</span>
         </a>
