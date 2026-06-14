@@ -784,7 +784,7 @@ function Footer() {
             Donate
             <HeartHandshake size={18} />
           </ButtonLink>
-          <ButtonLink href={`mailto:${brand.contactEmail}`} variant="secondary">
+          <ButtonLink href={`mailto:${brand.contactEmail}`}>
             <Mail size={18} />
             Email
           </ButtonLink>
