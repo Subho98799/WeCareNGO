@@ -5,22 +5,18 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
 import {
   ArrowRight,
-  Check,
   ChevronRight,
   HeartHandshake,
   Instagram,
   Mail,
   MapPin,
   Play,
-  ShieldCheck,
   Sparkles,
   Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { brand } from "@/content/brand";
 import {
-  donationOptions,
-  faqs,
   gallery,
   impactStats,
   programs,
@@ -100,7 +96,7 @@ function Header() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 px-3 py-3">
       <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/60 bg-white/78 px-3 py-2 shadow-[0_18px_60px_rgba(23,35,27,0.12)] backdrop-blur-xl">
-        <a className="focus-ring flex items-center gap-3 rounded-full pr-2" href="#top">
+        <a className="focus-ring flex items-center gap-3 rounded-full pr-2" href="/">
           <span className="relative h-14 w-14 overflow-hidden">
             <Image
               src="/site-media/photos/Logo.PNG"
@@ -112,16 +108,19 @@ function Header() {
           <span className="hidden text-sm font-black sm:block">{brand.name}</span>
         </a>
         <div className="hidden items-center gap-1 text-sm font-bold text-[#526052] md:flex">
-          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="#work">
+          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="/work">
             Work
           </a>
-          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="#stories">
+          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="/stories">
             Stories
           </a>
-          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="#volunteer">
+          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="/volunteer">
             Volunteer
           </a>
-          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="#support">
+          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="/about">
+            About
+          </a>
+          <a className="rounded-full px-3 py-2 hover:bg-black/5" href="/support">
             Support Us
           </a>
         </div>
@@ -163,7 +162,7 @@ function Hero() {
               {brand.primaryButtonLabel}
               <HeartHandshake size={18} />
             </ButtonLink>
-            <ButtonLink href="#stories" variant="secondary">
+            <ButtonLink href="/stories" variant="secondary">
               See the work
               <ChevronRight size={18} />
             </ButtonLink>
@@ -257,110 +256,6 @@ function ProgramMarquee() {
   );
 }
 
-function WhoWeAreSection() {
-  const causes = ["Education", "Women Empowerment", "Environment", "Animal Welfare"];
-
-  return (
-    <section className="relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-        <motion.div {...fadeUp} className="relative min-h-[500px]">
-          <div className="absolute left-0 top-6 h-[70%] w-[70%] overflow-hidden rounded-[1.9rem] bg-[#dfe6d6] media-shadow">
-            <Image
-              src="/site-media/photos/24-ctcdvvbmzg1.jpg"
-              alt="WeCare NGO Bachpanshala children learning in Bhopal"
-              fill
-              sizes="(max-width: 1024px) 72vw, 42vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute right-0 top-0 h-[34%] w-[42%] overflow-hidden rounded-[1.4rem] border-4 border-[var(--paper)] bg-[#dfe6d6] quiet-shadow">
-            <Image
-              src="/site-media/photos/35-dkpitkvie-c.jpg"
-              alt="WeCare NGO women empowerment and hygiene drive"
-              fill
-              sizes="(max-width: 1024px) 42vw, 22vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute bottom-4 right-2 h-[40%] w-[48%] overflow-hidden rounded-[1.5rem] border-4 border-[var(--paper)] bg-[#dfe6d6] quiet-shadow">
-            <video
-              className="h-full w-full object-cover"
-              src="/site-media/videos/40-dkpitkvie-c.mp4"
-              poster="/site-media/photos/196-dkpitkvie-c.jpg"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-20 text-white">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/18 px-3 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] backdrop-blur">
-                <Play size={13} />
-                Field work
-              </div>
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-5 max-w-[230px] rounded-3xl border border-white/70 bg-white/90 p-4 quiet-shadow backdrop-blur">
-            <p className="text-3xl font-black text-[var(--leaf-deep)]">2020</p>
-            <p className="mt-2 text-xs font-bold leading-5 text-[#5a665e]">
-              Started in Bhopal with one classroom, one belief, and people willing to show up.
-            </p>
-          </div>
-        </motion.div>
-
-        <motion.div {...fadeUp} className="relative">
-          <SectionLabel>Who we are</SectionLabel>
-          <h2 className="text-[clamp(2.1rem,4.4vw,4.25rem)] font-extrabold leading-[0.98]">
-            A family built on compassion and care.
-          </h2>
-          <div className="mt-5 space-y-4 text-base leading-7 text-[#4f5d54]">
-            <p>
-              Founded in 2020 by a passionate group of young people in Bhopal, We Care started with one classroom, one belief, and boundless hope.
-            </p>
-            <p>
-              What began as Bachpanshala, a free weekend education program, has grown into a movement across education, women empowerment, environment, and animal welfare.
-            </p>
-            <p className="rounded-[1.2rem] border-l-4 border-[var(--leaf)] bg-white/78 p-4 text-lg font-extrabold leading-7 text-[var(--ink)] quiet-shadow">
-              Kindness costs nothing, but its impact lasts forever.
-            </p>
-            <p>
-              We are still a small group of young people who decided to show up. Real change is built in classrooms on quiet afternoons, in conversations women were told to avoid, in care for street animals, and in cleaner streets one Sunday at a time.
-            </p>
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-3">
-            {causes.map((cause) => (
-              <span
-                key={cause}
-                className="rounded-full border border-black/8 bg-white/82 px-4 py-2 text-sm font-black text-[var(--leaf-deep)] quiet-shadow"
-              >
-                {cause}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[1.3rem] bg-[#fff8e4] p-4">
-              <p className="text-2xl font-black text-[var(--leaf-deep)]">2,000+</p>
-              <p className="mt-2 text-sm font-bold leading-6 text-[#5a665e]">supporters following and sharing the journey.</p>
-            </div>
-            <div className="rounded-[1.3rem] bg-[#eef4f8] p-4">
-              <p className="text-2xl font-black text-[var(--blue)]">5 years</p>
-              <p className="mt-2 text-sm font-bold leading-6 text-[#5a665e]">of steady service across Bhopal communities.</p>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <ButtonLink href={brand.instagramUrl} variant="secondary">
-              Follow our journey on Instagram
-              <Instagram size={18} />
-            </ButtonLink>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
 function ImpactStrip() {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
@@ -379,9 +274,41 @@ function ImpactStrip() {
   );
 }
 
-function WorkSection() {
+function AboutPreview() {
   return (
-    <section id="work" className="px-4 py-20 sm:px-6 lg:px-8">
+    <section className="px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center">
+          <div>
+            <SectionLabel>About WeCare</SectionLabel>
+            <h2 className="text-[clamp(2.1rem,4.4vw,4.25rem)] font-extrabold leading-[0.98]">
+              A family built on compassion and care.
+            </h2>
+            <p className="mt-5 text-base leading-7 text-[#4f5d54]">
+              Founded in 2020 by a passionate group of young people in Bhopal, WeCare NGO works across education, women empowerment, environment, and animal welfare.
+            </p>
+          </div>
+          <div className="rounded-[1.3rem] bg-[#fff8e4] p-5">
+            <p className="text-3xl font-black text-[var(--leaf-deep)]">2,000+</p>
+            <p className="mt-2 text-sm font-bold leading-6 text-[#5a665e]">supporters following and sharing the journey.</p>
+          </div>
+        </motion.div>
+        <motion.div {...fadeUp} className="mt-8 flex justify-center">
+          <ButtonLink href="/about">
+            Learn More About Us
+            <ArrowRight size={17} />
+          </ButtonLink>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function WorkPreview() {
+  const previewPrograms = programs.slice(0, 2);
+
+  return (
+    <section className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="max-w-3xl">
           <SectionLabel>The work</SectionLabel>
@@ -390,8 +317,8 @@ function WorkSection() {
           </h2>
         </motion.div>
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-4">
-          {programs.map((program, index) => (
+        <div className="mt-10 grid gap-4 lg:grid-cols-2">
+          {previewPrograms.map((program, index) => (
             <motion.article
               key={program.title}
               {...fadeUp}
@@ -404,7 +331,7 @@ function WorkSection() {
                   src={program.image}
                   alt={`${program.title} by WeCare NGO`}
                   fill
-                  sizes="(max-width: 1024px) 100vw, 25vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover transition duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/66 via-black/0 to-transparent opacity-0 transition duration-500 group-hover:opacity-100 group-focus-visible:opacity-100" />
@@ -433,14 +360,23 @@ function WorkSection() {
             </motion.article>
           ))}
         </div>
+
+        <motion.div {...fadeUp} className="mt-10 flex justify-center">
+          <ButtonLink href="/work">
+            View All Programs
+            <ArrowRight size={17} />
+          </ButtonLink>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-function StorySection() {
+function StoryPreview() {
+  const previewStory = stories[0];
+
   return (
-    <section id="stories" className="bg-[var(--ink)] px-4 py-20 text-white sm:px-6 lg:px-8">
+    <section className="bg-[var(--ink)] px-4 py-20 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div>
@@ -454,284 +390,86 @@ function StorySection() {
           </p>
         </motion.div>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {stories.map((story, index) => (
-            <motion.article
-              key={story.title}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: index * 0.08 }}
-              className="group overflow-hidden rounded-[1.7rem] bg-white text-[var(--ink)] quiet-shadow transition duration-500 hover:-translate-y-2 hover:shadow-[0_28px_70px_rgba(0,0,0,0.24)]"
-            >
-              <div className="relative aspect-[4/3.2] overflow-hidden">
-                <Image
-                  src={story.image}
-                  alt={story.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 33vw"
-                  className="object-cover transition duration-700 group-hover:scale-[1.08]"
-                />
-              </div>
-              <div className="p-6">
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-[var(--rose)]">{story.kicker}</p>
-                <h3 className="mt-3 text-3xl font-[700] leading-tight">{story.title}</h3>
-                <p className="mt-4 leading-7 text-[#5c665e]">{story.copy}</p>
-                <p className="mt-5 text-xs font-black uppercase tracking-[0.12em] text-[#8a928a]">{story.meta}</p>
-              </div>
-            </motion.article>
-          ))}
+        <div className="mt-12 grid gap-6 lg:grid-cols-1 lg:max-w-2xl lg:mx-auto">
+          <motion.article
+            key={previewStory.title}
+            {...fadeUp}
+            className="group overflow-hidden rounded-[1.7rem] bg-white text-[var(--ink)] quiet-shadow transition duration-500 hover:-translate-y-2 hover:shadow-[0_28px_70px_rgba(0,0,0,0.24)]"
+          >
+            <div className="relative aspect-[4/3.2] overflow-hidden">
+              <Image
+                src={previewStory.image}
+                alt={previewStory.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover transition duration-700 group-hover:scale-[1.08]"
+              />
+            </div>
+            <div className="p-6">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-[var(--rose)]">{previewStory.kicker}</p>
+              <h3 className="mt-3 text-3xl font-[700] leading-tight">{previewStory.title}</h3>
+              <p className="mt-4 leading-7 text-[#5c665e]">{previewStory.copy}</p>
+              <p className="mt-5 text-xs font-black uppercase tracking-[0.12em] text-[#8a928a]">{previewStory.meta}</p>
+            </div>
+          </motion.article>
         </div>
+
+        <motion.div {...fadeUp} className="mt-10 flex justify-center">
+          <ButtonLink href="/stories" variant="secondary">
+            Read More Stories
+            <ArrowRight size={17} />
+          </ButtonLink>
+        </motion.div>
       </div>
     </section>
   );
 }
 
-function DonationSection() {
+function SupportPreview() {
   return (
-    <section id="donate" className="px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-        <motion.div {...fadeUp}>
-          <SectionLabel>Donate</SectionLabel>
+    <section className="px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <motion.div {...fadeUp} className="mx-auto max-w-3xl text-center">
+          <SectionLabel>Support Us</SectionLabel>
           <h2 className="text-[clamp(2.4rem,6vw,5.2rem)] font-[720] leading-[0.95]">
             Make the next class, drive, or care visit possible.
           </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5a665e]">
-            Your donation supports practical work in Bhopal: education for children, dignity for women, cleaner public spaces, and care for animals.
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#5a665e]">
+            Your contribution supports education, dignity, cleaner public spaces, and care for animals across Bhopal.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href={brand.donationUrl}>
-              Donate through WeCare
-              <ArrowRight size={18} />
-            </ButtonLink>
-            <ButtonLink href={brand.instagramUrl} variant="secondary">
-              <Instagram size={18} />
-              Instagram proof
-            </ButtonLink>
-          </div>
         </motion.div>
 
-        <motion.div {...fadeUp} className="rounded-[2rem] border border-black/8 bg-white p-4 quiet-shadow sm:p-6">
-          <div className="flex items-center gap-3 border-b border-black/8 pb-5">
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-[#f1c84b]/24 text-[var(--leaf-deep)]">
-              <ShieldCheck size={23} />
-            </span>
+        <motion.div {...fadeUp} className="mx-auto mt-8 max-w-sm rounded-[2rem] border border-black/8 bg-white p-5 quiet-shadow">
+          <a
+            href={brand.donationUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="focus-ring flex items-center justify-between rounded-2xl border border-black/8 bg-[#fffaf0] p-4 transition duration-300 hover:-translate-y-1 hover:border-[var(--leaf)]/30 hover:bg-[#fff4d4] hover:shadow-[0_18px_40px_rgba(30,48,39,0.1)]"
+          >
             <div>
-              <h3 className="text-2xl font-[700]">Suggested giving</h3>
-              <p className="text-sm text-[#667066]">Placeholder amounts. Please confirm before going live.</p>
+              <div className="text-xl font-black text-[var(--leaf)]">Rs 500</div>
+              <div className="mt-1 text-sm font-bold text-[#59645c]">Sponsor learning supplies</div>
             </div>
-          </div>
-          <div className="mt-5 grid gap-3">
-            {donationOptions.map((option) => (
-              <a
-                key={option.amount}
-                href={brand.donationUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="focus-ring flex items-center justify-between rounded-2xl border border-black/8 bg-[#fffaf0] p-4 transition duration-300 hover:-translate-y-1 hover:border-[var(--leaf)]/30 hover:bg-[#fff4d4] hover:shadow-[0_18px_40px_rgba(30,48,39,0.1)]"
-              >
-                <div>
-                  <div className="text-2xl font-black text-[var(--leaf)]">{option.amount}</div>
-                  <div className="mt-1 text-sm font-bold text-[#59645c]">{option.label}</div>
-                </div>
-                <ArrowRight size={20} />
-              </a>
-            ))}
-          </div>
+            <ArrowRight size={20} />
+          </a>
+        </motion.div>
+
+        <motion.div {...fadeUp} className="mt-8 flex justify-center">
+          <ButtonLink href="/support">
+            Support Our Mission
+            <ArrowRight size={17} />
+          </ButtonLink>
         </motion.div>
       </div>
     </section>
   );
 }
 
-function SupportSection() {
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "", amount: "", utr: "", message: "" });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxteEs-Rm-Ofl54eftJxRXDoaWe7mdvTnZ8b0yPfn7kOwx0Ek826d5AHxx5vchh4UYS/exec";
-
-  const handleChange = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-    if (errors[field]) {
-      setErrors((prev) => {
-        const { [field]: _, ...rest } = prev;
-        return rest;
-      });
-    }
-  };
-
-  const validate: () => boolean = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone is required";
-    } else if (formData.phone.replace(/\D/g, "").length < 10) {
-      newErrors.phone = "Phone must be at least 10 digits";
-    }
-    if (!formData.utr.trim()) newErrors.utr = "Transaction ID is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-    setSubmitState("loading");
-    try {
-      await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          amount: formData.amount,
-          utr: formData.utr,
-          message: formData.message,
-        }),
-      });
-      setSubmitState("success");
-      setFormData({ name: "", phone: "", email: "", amount: "", utr: "", message: "" });
-    } catch {
-      setSubmitState("error");
-    }
-  };
+function VolunteerPreview() {
+  const previewPaths = volunteerPaths.slice(0, 2);
 
   return (
-    <section id="support" className="scroll-mt-20 px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-8 lg:grid-cols-[0.42fr_0.58fr] lg:items-start">
-          <motion.div {...fadeUp} className="max-w-3xl">
-            <SectionLabel>Support Us</SectionLabel>
-            <h2 className="text-[clamp(2rem,5vw,4.4rem)] font-[720] leading-[0.95]">
-              Support meaningful change.
-            </h2>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#5a665e]">
-              Have questions before donating? Talk to our team, learn where contributions go, and explore ways to support WeCare's work.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="https://wa.me/918292254859">
-                Talk To Us
-                <ArrowRight size={18} />
-              </ButtonLink>
-              <ButtonLink href="tel:+918292254859" variant="secondary">
-                Call Us
-              </ButtonLink>
-            </div>
-          </motion.div>
-
-          <motion.div {...fadeUp} className="rounded-[2rem] border border-black/8 bg-white p-4 quiet-shadow sm:p-6">
-            <div className="flex items-center gap-3 border-b border-black/8 pb-5">
-              <span className="grid h-12 w-12 place-items-center rounded-full bg-[#f1c84b]/24 text-[var(--leaf-deep)]">
-                <ShieldCheck size={23} />
-              </span>
-              <div>
-                <h3 className="text-2xl font-[700]">Donate via UPI</h3>
-                <p className="text-sm text-[#667066]">Scan using any UPI app</p>
-              </div>
-            </div>
-            <div className="mt-5 flex flex-col items-center gap-6 lg:flex-row lg:items-start">
-              <div className="w-full max-w-[200px] flex-shrink-0">
-                <div className="relative aspect-square overflow-hidden rounded-2xl bg-[#f4f1e8]">
-                  <Image
-                    src="/site-media/photos/donation-qr.jpg"
-                    alt="UPI QR code for WeCare NGO donation"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-              <div className="w-full flex-1 space-y-3">
-                <div className="rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#667066]">UPI ID</p>
-                  <p className="mt-1 font-extrabold text-[var(--ink)]">8292254859@upi</p>
-                </div>
-                <div className="rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Contact</p>
-                  <p className="mt-1 font-extrabold text-[var(--ink)]">8292254859</p>
-                </div>
-                <div className="rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3">
-                  <p className="text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Email</p>
-                  <p className="mt-1 font-extrabold text-[var(--ink)]">gyanram2311@gmail.com</p>
-                </div>
-              </div>
-            </div>
-            <p className="mt-4 text-center text-xs leading-5 text-[#667066]">
-              After completing your donation, you can submit your details for confirmation.
-            </p>
-          </motion.div>
-        </div>
-
-        <motion.div {...fadeUp} className="mt-8 rounded-[2rem] border border-black/8 bg-white p-4 quiet-shadow sm:p-6">
-          <form onSubmit={handleSubmit}>
-            <h3 className="text-2xl font-[700]">Donation Confirmation</h3>
-            <p className="mt-2 text-sm text-[#667066]">
-              Already completed your donation? Share your details so we can acknowledge your contribution.
-            </p>
-
-            {submitState === "success" && (
-              <div className="mt-4 rounded-2xl bg-[#d4edda]/80 px-4 py-3 text-sm font-medium text-[#155724]">
-                Thank you. Your donation details have been submitted successfully.
-              </div>
-            )}
-
-            {submitState === "error" && (
-              <div className="mt-4 rounded-2xl bg-[#f8d7da]/80 px-4 py-3 text-sm font-medium text-[#721c24]">
-                Submission failed. Please try again.
-              </div>
-            )}
-
-            <div className="mt-5 space-y-4">
-              <div className="grid gap-4 lg:grid-cols-3">
-                <div>
-                  <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Full Name <span className="text-[var(--rose)]">*</span></label>
-                  <input type="text" placeholder="Your full name" value={formData.name} onChange={handleChange("name")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
-                  {errors.name && <p className="mt-1 text-xs text-[var(--rose)]">{errors.name}</p>}
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Phone Number <span className="text-[var(--rose)]">*</span></label>
-                  <input type="tel" placeholder="Your phone number" value={formData.phone} onChange={handleChange("phone")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
-                  {errors.phone && <p className="mt-1 text-xs text-[var(--rose)]">{errors.phone}</p>}
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Email Address</label>
-                  <input type="email" placeholder="your@email.com" value={formData.email} onChange={handleChange("email")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
-                </div>
-              </div>
-              <div className="grid gap-4 lg:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Donation Amount</label>
-                  <input type="text" placeholder="e.g. Rs 1,000" value={formData.amount} onChange={handleChange("amount")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Transaction ID / UTR Number <span className="text-[var(--rose)]">*</span></label>
-                  <input type="text" placeholder="Transaction reference number" value={formData.utr} onChange={handleChange("utr")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
-                  {errors.utr && <p className="mt-1 text-xs text-[var(--rose)]">{errors.utr}</p>}
-                </div>
-              </div>
-              <div>
-                <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Message</label>
-                <textarea rows={3} placeholder="Any message for the team" value={formData.message} onChange={handleChange("message")} className="w-full resize-none rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30"></textarea>
-              </div>
-            </div>
-            <div className="mt-6">
-              <button type="submit" disabled={submitState === "loading"} className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)] disabled:opacity-60 disabled:cursor-not-allowed">
-                {submitState === "loading" ? "Submitting..." : "Submit Donation Details"}
-                {submitState !== "loading" && <ArrowRight size={18} />}
-              </button>
-            </div>
-            <p className="mt-4 text-center text-xs leading-5 text-[#667066]">
-              Your information will be used only for donation acknowledgment purposes.
-            </p>
-          </form>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function VolunteerSection() {
-  return (
-    <section id="volunteer" className="px-4 py-24 sm:px-6 lg:px-8">
+    <section className="px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.div {...fadeUp} className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
@@ -770,7 +508,7 @@ function VolunteerSection() {
           </motion.div>
 
           <motion.div {...fadeUp} className="grid gap-3 rounded-[2rem] bg-[#f4f1e8] p-4 sm:p-6">
-            {volunteerPaths.map((path, index) => (
+            {previewPaths.map((path, index) => (
               <article
                 key={path.title}
                 className="group grid gap-4 rounded-[1.4rem] bg-white/74 p-4 transition duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-[0_18px_40px_rgba(30,48,39,0.1)] sm:grid-cols-[auto_1fr_auto] sm:items-start sm:p-5"
@@ -788,8 +526,8 @@ function VolunteerSection() {
               </article>
             ))}
             <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href={brand.volunteerUrl} variant="primary">
-                Start as a volunteer
+              <ButtonLink href="/volunteer" variant="primary">
+                Become a Volunteer
                 <Users size={18} />
               </ButtonLink>
               <ButtonLink href={brand.instagramUrl} variant="secondary">
@@ -804,7 +542,9 @@ function VolunteerSection() {
   );
 }
 
-function GallerySection() {
+function GalleryPreview() {
+  const previewGallery = gallery.slice(0, 4);
+
   return (
     <section className="overflow-hidden py-16">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -822,7 +562,7 @@ function GallerySection() {
         </div>
       </div>
       <div className="scrollbar-none mt-10 flex snap-x gap-4 overflow-x-auto px-4 pb-5 sm:px-6 lg:px-8">
-        {gallery.map((item, index) => (
+        {previewGallery.map((item, index) => (
           <motion.div
             key={item.src}
             {...fadeUp}
@@ -852,71 +592,12 @@ function GallerySection() {
           </motion.div>
         ))}
       </div>
-    </section>
-  );
-}
-
-function TrustSection() {
-  const [openFaq, setOpenFaq] = useState(0);
-
-  return (
-    <section className="px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl items-start gap-5 lg:grid-cols-[1fr_0.9fr]">
-        <motion.div {...fadeUp} className="rounded-[2rem] bg-[var(--leaf)] p-6 text-white sm:p-10 lg:sticky lg:top-28">
-          <SectionLabel>Why it feels different</SectionLabel>
-          <h2 className="text-[clamp(2.2rem,5vw,4.6rem)] font-[720] leading-[0.98]">Youth led care with real public proof.</h2>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78">
-            WeCare's Instagram shows the actual people, classrooms, drives, and volunteers behind the work. This new site brings that proof forward and keeps the donation path simple.
-          </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl bg-white/12 p-4">
-              <div className="text-3xl font-black">{brand.socialProof.instagramFollowers}</div>
-              <div className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-white/70">Instagram followers</div>
-            </div>
-            <div className="rounded-2xl bg-white/12 p-4">
-              <div className="text-3xl font-black">{brand.socialProof.instagramPosts}</div>
-              <div className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-white/70">Posts shared</div>
-            </div>
-            <div className="rounded-2xl bg-white/12 p-4">
-              <div className="text-3xl font-black">{brand.socialProof.yearsActive}</div>
-              <div className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-white/70">Years active</div>
-            </div>
-          </div>
-        </motion.div>
-        <motion.div {...fadeUp} className="rounded-[2rem] border border-black/8 bg-white p-6 quiet-shadow sm:p-8">
-          <h3 className="text-3xl font-[700]">Common questions</h3>
-          <div className="mt-6 grid gap-3">
-            {faqs.map((faq, index) => {
-              const isOpen = openFaq === index;
-
-              return (
-                <div key={faq.question} className="rounded-2xl border border-black/8 bg-[#fbfaf4]">
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                    className="focus-ring flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl p-4 text-left font-black"
-                    aria-expanded={isOpen}
-                  >
-                  {faq.question}
-                    <Sparkles
-                      className={`shrink-0 text-[var(--sun)] transition ${isOpen ? "rotate-45" : ""}`}
-                      size={18}
-                    />
-                  </button>
-                  <motion.div
-                    initial={false}
-                    animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-                    transition={{ duration: 0.24, ease: "easeOut" }}
-                    className="overflow-hidden"
-                  >
-                    <p className="px-4 pb-4 leading-7 text-[#5c665e]">{faq.answer}</p>
-                  </motion.div>
-                </div>
-              );
-            })}
-          </div>
-        </motion.div>
-      </div>
+      <motion.div {...fadeUp} className="mt-10 flex justify-center px-4 sm:px-6 lg:px-8">
+        <ButtonLink href="/gallery">
+          View Full Gallery
+          <ArrowRight size={17} />
+        </ButtonLink>
+      </motion.div>
     </section>
   );
 }
@@ -997,15 +678,13 @@ export default function Home() {
       <main>
         <Hero />
         <ProgramMarquee />
-        <WhoWeAreSection />
         <ImpactStrip />
-        <WorkSection />
-        <StorySection />
-        <DonationSection />
-        <SupportSection />
-        <VolunteerSection />
-        <GallerySection />
-        <TrustSection />
+        <AboutPreview />
+        <WorkPreview />
+        <StoryPreview />
+        <VolunteerPreview />
+        <SupportPreview />
+        <GalleryPreview />
         <TechnologyPartner />
       </main>
       <Footer />
