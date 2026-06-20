@@ -6,6 +6,7 @@ import Lenis from "lenis";
 import {
   ArrowRight,
   BookOpen,
+  ChevronLeft,
   ChevronRight,
   Heart,
   HeartHandshake,
@@ -15,11 +16,10 @@ import {
   PawPrint,
   Play,
   Sparkles,
-  Star,
   Users,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { brand } from "@/content/brand";
 import {
   gallery,
@@ -561,96 +561,272 @@ function FeaturedStory() {
 
 type GalleryItem = (typeof gallery)[number];
 
-// Curated homepage preview: equal-height thumbnails of genuine field media.
-// Prioritises children learning, volunteers teaching, women empowerment,
-// cleanliness drives, team activities, and animal welfare. 3 videos max.
-const galleryPreview: GalleryItem[] = [
-  gallery[0],  // Bachpanshala in motion (video)
-  gallery[1],  // Teaching young minds
-  gallery[7],  // Volunteer field work
-  gallery[2],  // Raahat Khel Mela winners
-  gallery[3],  // Dignity in conversation (video)
-  gallery[8],  // Learning together
-  gallery[9],  // Creative workshop
-  gallery[4],  // Clean Bhopal drive
-  gallery[5],  // Clothes and shoes support
-  gallery[6],  // Everyday care (animal welfare)
-  gallery[10], // Children learning together
-  gallery[19], // Five years of showing up (video)
-];
+function GalleryVideo({ src, poster }: { src: string; poster?: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
 
-function GalleryMediaTile({
-  item,
-  className = "",
-}: {
-  item: GalleryItem;
-  className?: string;
-}) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.play().catch(() => {});
+        } else {
+          el.pause();
+        }
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div
-      className={`group relative overflow-hidden rounded-[1rem] bg-[#dfe6d6] quiet-shadow ${className}`}
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+    />
+  );
+}
+
+function MediaViewer({
+  items,
+  index,
+  onClose,
+}: {
+  items: GalleryItem[];
+  index: number;
+  onClose: () => void;
+}) {
+  const [currentIndex, setCurrentIndex] = useState(index);
+
+  const item = items[currentIndex];
+  const dragStart = useRef(0);
+
+  const goNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % items.length);
+  }, [items.length]);
+
+  const goPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
+  }, [items.length]);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    },
+    [onClose, goPrev, goNext],
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    dragStart.current = e.clientX;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    const diff = e.clientX - dragStart.current;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goPrev();
+      else goNext();
+    }
+  };
+
+  if (!item) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 p-2 sm:p-4"
+      onClick={onClose}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
-      <Image
-        src={item.type === "video" ? item.poster! : item.src}
-        alt={item.title}
-        fill
-        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 12vw"
-        className="object-cover transition duration-500 group-hover:scale-105"
-      />
-      {item.type === "video" ? (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/92 shadow transition duration-200 group-hover:scale-110">
-            <Play size={15} className="ml-0.5 text-[var(--leaf)]" fill="currentColor" />
-          </div>
-        </div>
-      ) : null}
-    </div>
+      <div
+        className="relative flex max-h-[90vh] w-full max-w-6xl items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {item.type === "video" ? (
+          <video
+            key={item.src}
+            src={item.src}
+            poster={item.poster}
+            controls
+            autoPlay
+            className="max-h-[85vh] w-full rounded-2xl"
+          />
+        ) : (
+          <img
+            key={item.src}
+            src={item.src}
+            alt={item.title}
+            className="max-h-[85vh] w-auto max-w-full rounded-2xl object-contain"
+          />
+        )}
+
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -top-10 right-0 flex items-center gap-2 rounded-full bg-white/12 px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
+        >
+          <X size={14} />
+          Close
+        </button>
+
+        <button
+          type="button"
+          onClick={goPrev}
+          className="absolute left-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/12 text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
+        >
+          <ChevronLeft size={20} />
+        </button>
+
+        <button
+          type="button"
+          onClick={goNext}
+          className="absolute right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/12 text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
+        >
+          <ChevronRight size={20} />
+        </button>
+      </div>
+
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-white/12 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-white/60 backdrop-blur">
+        {currentIndex + 1} / {items.length}
+      </div>
+    </motion.div>
   );
 }
 
 function GalleryMini() {
+  const [items] = useState<GalleryItem[]>(() => [...gallery].reverse());
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  if (items.length === 0) return null;
+
+  const duplicated = [...items, ...items];
+
+  const getCardWidth = (i: number) => {
+    const w = i % 10;
+    if (w === 0 || w === 5) return "w-[280px] sm:w-[340px]";
+    if (w === 3 || w === 8) return "w-[220px] sm:w-[260px]";
+    return "w-[200px] sm:w-[240px]";
+  };
+
+  const getCardHeight = (i: number) => {
+    const h = i % 6;
+    if (h === 0) return "aspect-[4/5]";
+    if (h === 2 || h === 4) return "aspect-[4/3]";
+    return "aspect-[3/4]";
+  };
+
   return (
-    <section className="px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div>
-          <SectionLabel>Proof from the ground</SectionLabel>
-          <div className="flex items-end justify-between gap-4">
+    <section className="overflow-hidden px-4 py-12 sm:px-6 lg:px-8">
+      <style>{`
+        @keyframes galleryScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .gallery-track {
+          animation: galleryScroll 60s linear infinite;
+          width: max-content;
+        }
+        .gallery-track:hover {
+          animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .gallery-track { animation: none; }
+        }
+      `}</style>
+
+      <div className="mx-auto mb-6 max-w-7xl">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <SectionLabel>Proof from the ground</SectionLabel>
             <h2 className="text-[clamp(2rem,4vw,3.6rem)] font-[720] leading-[0.98]">
               Every moment matters.
             </h2>
-            <a
-              href="/gallery"
-              className="focus-ring hidden shrink-0 items-center gap-1.5 rounded-full px-1 py-2 text-sm font-bold text-[var(--leaf-deep)] transition hover:translate-x-0.5 sm:inline-flex"
-            >
-              View Complete Gallery
-              <ArrowRight size={16} />
-            </a>
           </div>
-        </div>
-
-        <motion.div
-          {...fadeUp}
-          className="mt-6 grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 lg:grid-cols-6"
-        >
-          {galleryPreview.map((item) => (
-            <GalleryMediaTile
-              key={item.src}
-              item={item}
-              className="aspect-square sm:aspect-[4/5]"
-            />
-          ))}
-        </motion.div>
-
-        <motion.div {...fadeUp} className="mt-5 flex justify-center sm:hidden">
           <a
             href="/gallery"
-            className="focus-ring inline-flex items-center gap-1.5 text-sm font-bold text-[var(--leaf-deep)]"
+            className="focus-ring hidden shrink-0 items-center gap-1.5 rounded-full px-1 py-2 text-sm font-bold text-[var(--leaf-deep)] transition hover:translate-x-0.5 sm:inline-flex"
           >
             View Complete Gallery
             <ArrowRight size={16} />
           </a>
-        </motion.div>
+        </div>
       </div>
+
+      <div className="relative -mx-4 sm:-mx-6 lg:-mx-8">
+        <div className="flex gap-3 gallery-track px-4 sm:px-6 lg:px-8">
+          {duplicated.map((item, i) => {
+            const isVideo = item.type === "video";
+            return (
+              <button
+                key={`${item.src}-${i}`}
+                onClick={() => setSelectedIndex(i % items.length)}
+                className={`group relative shrink-0 cursor-pointer overflow-hidden rounded-[1rem] bg-[#dfe6d6] quiet-shadow text-left transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(30,48,39,0.14)] ${getCardWidth(i)} ${getCardHeight(i)}`}
+              >
+                {isVideo ? (
+                  <GalleryVideo src={item.src} poster={item.poster} />
+                ) : (
+                  <Image
+                    src={item.src}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                    className="object-cover transition duration-500 group-hover:scale-105"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
+                <div className="absolute bottom-0 left-0 right-0 translate-y-2 p-3 text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="text-sm font-black leading-tight drop-shadow-sm">{item.title}</p>
+                  <div className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-2 py-0.5 text-[0.55rem] font-black uppercase tracking-[0.1em] backdrop-blur">
+                    {isVideo && <Play size={9} />}
+                    {item.category}
+                  </div>
+                </div>
+                {isVideo && (
+                  <div className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-[0.55rem] font-black uppercase tracking-[0.1em] text-white backdrop-blur">
+                    <Play size={9} className="mr-0.5 inline" />
+                    Video
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-5 flex justify-center sm:hidden">
+        <a
+          href="/gallery"
+          className="focus-ring inline-flex items-center gap-1.5 text-sm font-bold text-[var(--leaf-deep)]"
+        >
+          View Complete Gallery
+          <ArrowRight size={16} />
+        </a>
+      </div>
+
+      {selectedIndex !== null && (
+        <MediaViewer
+          items={items}
+          index={selectedIndex}
+          onClose={() => setSelectedIndex(null)}
+        />
+      )}
     </section>
   );
 }
@@ -707,11 +883,11 @@ function FinalCTA() {
               Your time, your voice, your contribution — thats how a classroom happens, how a street gets cleaned, how a life feels seen.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <ButtonLink href="/volunteer" variant="primary" className="!bg-white !text-[var(--leaf)] hover:!bg-white/90">
+              <ButtonLink href="/volunteer" variant="primary">
                 Volunteer With Us
                 <Users size={18} />
               </ButtonLink>
-              <ButtonLink href={brand.donationUrl} variant="secondary" className="!border-white/40 !text-white hover:!bg-white/12">
+              <ButtonLink href={brand.donationUrl} variant="primary">
                 Make a Donation
                 <HeartHandshake size={18} />
               </ButtonLink>

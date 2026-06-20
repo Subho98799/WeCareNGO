@@ -5,7 +5,7 @@ export const brand = {
   businessType: "Nonprofit organization",
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/wecareorgg/",
   donationUrl: "/support",
-  volunteerUrl: "https://linktr.ee/wecareorgg",
+  volunteerUrl: "/volunteer",
   contactEmail: "wecareorgg@gmail.com",
   contactPhone: "",
   primaryButtonLabel: "Donate now",
