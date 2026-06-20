@@ -4,7 +4,7 @@ export const brand = {
   city: "Bhopal, India",
   businessType: "Nonprofit organization",
   instagramUrl: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/wecareorgg/",
-  donationUrl: "https://linktr.ee/wecareorgg",
+  donationUrl: "/support",
   volunteerUrl: "https://linktr.ee/wecareorgg",
   contactEmail: "wecareorgg@gmail.com",
   contactPhone: "",
