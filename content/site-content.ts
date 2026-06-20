@@ -15,7 +15,7 @@ export const impactStats = [
     note: "Removed at Manuabhan Tekri through the JAGRITI cleanliness drive.",
   },
   {
-    value: "1,000",
+    value: "1,000+",
     label: "pads distributed",
     note: "Menstrual hygiene support with partner organizations.",
   },
