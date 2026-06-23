@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
 import {
@@ -363,6 +364,13 @@ function WhoWeAre() {
   );
 }
 
+const programLinks: Record<string, string> = {
+  "Bachpanshala": "/work#bachpanshala",
+  "Women Empowerment": "/work#women-empowerment",
+  "Animal Welfare": "/work#animal-welfare",
+  "JAGRITI Clean Drives": "/work#jagriti",
+};
+
 function Programs() {
   const iconMap = [BookOpen, Heart, PawPrint, Sparkles];
 
@@ -380,36 +388,40 @@ function Programs() {
           {programs.map((program, index) => {
             const Icon = iconMap[index];
             return (
-              <motion.article
+              <motion.div
                 key={program.title}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: index * 0.06 }}
-                className="group flex flex-col overflow-hidden rounded-[1.4rem] border border-black/8 bg-white quiet-shadow transition duration-500 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(30,48,39,0.14)]"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#dfe6d6]">
-                  <Image
-                    src={program.image}
-                    alt={`${program.title} by WeCare NGO`}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute left-3 top-3 rounded-full bg-white/88 px-2.5 py-0.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-[var(--leaf-deep)]">
-                    {program.accent}
+                <Link
+                  href={programLinks[program.title] || "/about"}
+                  className="group flex flex-col overflow-hidden rounded-[1.4rem] border border-black/8 bg-white quiet-shadow transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(30,48,39,0.14)] cursor-pointer"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#dfe6d6]">
+                    <Image
+                      src={program.image}
+                      alt={`${program.title} by WeCare NGO`}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute left-3 top-3 rounded-full bg-white/88 px-2.5 py-0.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-[var(--leaf-deep)]">
+                      {program.accent}
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-1 flex-col p-4">
-                  <div className="flex items-center gap-2">
-                    <Icon size={16} className="shrink-0 text-[var(--leaf)]" />
-                    <h3 className="text-base font-extrabold">{program.title}</h3>
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="flex items-center gap-2">
+                      <Icon size={16} className="shrink-0 text-[var(--leaf)]" />
+                      <h3 className="text-base font-extrabold">{program.title}</h3>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-[#4f5d54] line-clamp-2">{program.short}</p>
+                    <p className="mt-auto pt-3 inline-flex w-fit items-center gap-1.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-[var(--leaf-deep)]">
+                      Read More
+                      <ArrowRight size={13} className="transition duration-300 group-hover:translate-x-1.5" />
+                    </p>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-[#4f5d54] line-clamp-2">{program.short}</p>
-                  <p className="mt-auto pt-3 inline-flex w-fit items-center gap-1.5 text-[0.65rem] font-black uppercase tracking-[0.12em] text-[var(--leaf-deep)]">
-                    Read More
-                    <ArrowRight size={13} className="transition group-hover:translate-x-0.5" />
-                  </p>
-                </div>
-              </motion.article>
+                </Link>
+              </motion.div>
             );
           })}
         </div>

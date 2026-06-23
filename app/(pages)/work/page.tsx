@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, HeartHandshake, Play, Users, Instagram } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { brand } from "@/content/brand";
 import { programs, impactStats, gallery } from "@/content/site-content";
 
@@ -200,14 +200,11 @@ const deepDiveData: DeepDiveItem[] = [
   },
 ];
 
-function DeepDiveBlock({ item, index }: { item: DeepDiveItem; index: number }) {
+function DeepDiveBlock({ item, index, isActive }: { item: DeepDiveItem; index: number; isActive: boolean }) {
   const isReversed = index % 2 === 1;
 
   return (
-    <section
-      id={item.id}
-      className="scroll-mt-24"
-    >
+    <section id={item.id} className="scroll-mt-24">
       <motion.div
         {...fadeUp}
         className={`grid gap-8 lg:grid-cols-2 lg:items-center ${isReversed ? "" : ""}`}
@@ -228,7 +225,11 @@ function DeepDiveBlock({ item, index }: { item: DeepDiveItem; index: number }) {
           <span className="h-2 w-2 rounded-full bg-[var(--sun)]" />
           {item.accent}
         </div>
-        <h3 className="text-[clamp(1.8rem,3.5vw,3rem)] font-[720] leading-[0.98]">{item.title}</h3>
+        <h3 className={`text-[clamp(1.8rem,3.5vw,3rem)] font-[720] leading-[0.98] ${isActive ? "text-[var(--leaf-deep)]" : ""}`}>
+          {isActive && <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[var(--leaf)]" />}
+          {item.title}
+          {isActive && <span className="mt-1 block h-0.5 w-12 rounded-full bg-[var(--leaf)]" />}
+        </h3>
 
         <div className="mt-4 space-y-4 text-base leading-7 text-[#4f5d54]">
           {item.paragraphs.map((p, i) => (
@@ -274,6 +275,20 @@ function DeepDiveBlock({ item, index }: { item: DeepDiveItem; index: number }) {
 }
 
 function DeepDiveSection() {
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash) setActiveSection(hash);
+
+    const handleHashChange = () => {
+      setActiveSection(window.location.hash.replace("#", "") || null);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   return (
     <section className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -289,7 +304,7 @@ function DeepDiveSection() {
 
         <div className="space-y-24">
           {deepDiveData.map((item, index) => (
-            <DeepDiveBlock key={item.title} item={item} index={index} />
+            <DeepDiveBlock key={item.title} item={item} index={index} isActive={activeSection === item.id} />
           ))}
         </div>
       </div>

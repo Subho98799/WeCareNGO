@@ -167,7 +167,7 @@ function StoriesHero() {
           </div>
           <div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-[1.2rem] bg-[#3a5a45] media-shadow">
-              <Image src="/site-media/photos/01-c-ffn9xv27m.jpg" alt="A WeCare volunteer teaching children at Bachpanshala" fill sizes="40vw" className="object-cover" />
+              <Image src="/site-media/photos/In%20the%20classroom%20of%20Bachpanshala.jpg" alt="In the classroom of Bachpanshala — children learning, faces visible, real impact" fill sizes="40vw" className="object-cover object-[center_40%]" />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-5 pt-12">
                 <p className="text-sm font-medium leading-snug text-white/90 italic">&ldquo;We came to teach. We stayed to learn.&rdquo;</p>
               </div>
