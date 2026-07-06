@@ -13,32 +13,30 @@ const fadeUp = {
   transition: { duration: 0.7, ease: "easeOut" },
 } as const;
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzLSqsmzsscyWoZb5cLO6884BdhFVcz188TsueiMlipj-0Wbf-FNg_r2xgZTIsZwBUq/exec";
-
 const impactCards = [
   {
     icon: Users,
-    value: "1",
-    label: "child taught",
-    desc: "Teaching one child to read, write, and dream creates a future that extends far beyond the classroom.",
+    value: "100+",
+    label: "Volunteers Engaged",
+    desc: "Students, working professionals, and changemakers who give their time every week across Bhopal.",
   },
   {
     icon: Sparkles,
-    value: "1",
-    label: "woman supported",
-    desc: "Helping one woman access health conversations and dignity breaks a cycle that has lasted generations.",
+    value: "20+",
+    label: "Community Initiatives",
+    desc: "Cleanliness drives, hygiene workshops, and community programs run consistently since 2020.",
   },
   {
     icon: Heart,
-    value: "1",
-    label: "animal rescued",
-    desc: "Feeding and caring for one street animal is a small act that restores trust between humans and strays.",
+    value: "1,000+",
+    label: "Lives Impacted",
+    desc: "Children, women, families, and community members reached through education, health, and care programs.",
   },
   {
     icon: MapPin,
-    value: "1",
-    label: "drive led",
-    desc: "Leading one cleanliness drive removes waste and inspires a community to take ownership of shared spaces.",
+    value: "5",
+    label: "Years of Service",
+    desc: "Consistent presence in Bhopal since 2020. Still volunteer-powered. Still growing every week.",
   },
 ];
 
@@ -110,18 +108,19 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 
 function VolunteerContent() {
   const [formData, setFormData] = useState({
-    name: "",
+    fullName: "",
     phone: "",
     email: "",
     age: "",
     city: "",
     occupation: "",
-    interest: "",
+    interestArea: "",
     availability: "",
     whyVolunteer: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -132,7 +131,7 @@ function VolunteerContent() {
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.fullName.trim()) newErrors.fullName = "Name is required";
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone is required";
     } else if (formData.phone.replace(/\D/g, "").length < 10) {
@@ -140,7 +139,7 @@ function VolunteerContent() {
     }
     if (!formData.email.trim()) newErrors.email = "Email is required";
     if (!formData.age.trim()) newErrors.age = "Age is required";
-    if (!formData.interest) newErrors.interest = "Select an interest area";
+    if (!formData.interestArea) newErrors.interestArea = "Select an interest area";
     if (!formData.availability) newErrors.availability = "Select your availability";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -150,35 +149,48 @@ function VolunteerContent() {
     e.preventDefault();
     if (!validate()) return;
     setSubmitting(true);
+    const payload = {
+      type: "volunteer",
+      fullName: formData.fullName,
+      phone: formData.phone,
+      email: formData.email,
+      age: formData.age,
+      city: formData.city,
+      occupation: formData.occupation,
+      interestArea: formData.interestArea,
+      availability: formData.availability,
+      whyVolunteer: formData.whyVolunteer,
+    };
+    console.log("Volunteer payload:", payload);
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+      const response = await fetch("/api/volunteer", {
         method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-          type: "volunteer",
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          age: formData.age,
-          city: formData.city,
-          occupation: formData.occupation,
-          interest: formData.interest,
-          availability: formData.availability,
-          whyVolunteer: formData.whyVolunteer,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-    } catch {
-      // no-cors ignores response
+      const data = await response.json();
+      console.log("Volunteer proxy response:", data);
+      if (data.success) {
+        setSubmitted(true);
+        setSubmitError(null);
+      } else {
+        setSubmitError(data.message || "Unable to submit application.");
+      }
+    } catch (err) {
+      console.error("Volunteer submission error:", err);
+      setSubmitError("Unable to submit application.");
     }
     setSubmitting(false);
-    setSubmitted(true);
-    if (formRef.current) formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (submitted && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
   };
 
   const handleReset = () => {
     setSubmitted(false);
+    setSubmitError(null);
     setErrors({});
-    setFormData({ name: "", phone: "", email: "", age: "", city: "", occupation: "", interest: "", availability: "", whyVolunteer: "" });
+    setFormData({ fullName: "", phone: "", email: "", age: "", city: "", occupation: "", interestArea: "", availability: "", whyVolunteer: "" });
   };
 
   return (
@@ -186,66 +198,79 @@ function VolunteerContent() {
       <div className="pt-16 lg:pt-20" />
 
       {/* ===== SECTION 1 — HERO ===== */}
-      <section className="relative overflow-hidden bg-[var(--ink)] px-4 py-20 text-white sm:px-6 lg:px-8 lg:py-28">
-        <div className="absolute inset-0 opacity-30">
+      <section className="relative overflow-hidden bg-[var(--ink)] px-4 pb-20 pt-16 text-white sm:px-6 lg:px-8 lg:pb-28 lg:pt-20">
+        <div className="absolute inset-0 opacity-15">
           <Image src="/site-media/photos/76-c5dyzlspl58.jpg" alt="" fill className="object-cover" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--ink)] via-[var(--ink)]/85 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--ink)] via-[var(--ink)]/90 to-[var(--ink)]" />
         <div className="relative z-10 mx-auto max-w-7xl">
-          <motion.div {...fadeUp} className="max-w-2xl">
-            <SectionLabel>Volunteer with WeCare</SectionLabel>
-            <h1 className="text-[clamp(2.8rem,6.5vw,5.8rem)] font-[720] leading-[0.92]">
-              One person showing up can change someone&rsquo;s day.
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-white/72">
-              Every classroom session, awareness drive, and community initiative begins because someone chooses to show up. That someone could be you.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#volunteer-form" className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
-                Become a Volunteer
-                <ArrowRight size={18} />
-              </a>
-              <a href="#volunteer-stories" className="inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] backdrop-blur transition-colors hover:bg-white/25">
-                See Volunteer Stories
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
+            {/* LEFT — headline + CTAs (renders second on mobile) */}
+            <motion.div {...fadeUp} className="lg:order-1">
+              <SectionLabel>Volunteer with WeCare</SectionLabel>
+              <h1 className="mt-1 text-[clamp(2.8rem,6.5vw,5.8rem)] font-[720] leading-[0.92]">
+                One person showing up can change someone&rsquo;s day.
+              </h1>
+              <p className="mt-5 max-w-xl text-lg leading-8 text-white/72">
+                Every classroom session, awareness drive, and community initiative begins because someone chooses to show up. That someone could be you.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="#volunteer-form" className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
+                  Volunteer With Us
+                  <ArrowRight size={18} />
+                </a>
+                <a href="#volunteer-stories" className="inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] backdrop-blur transition-colors hover:bg-white/25">
+                  Read Volunteer Stories
+                </a>
+              </div>
 
-      {/* ===== SECTION 2 — IMPACT OF A VOLUNTEER ===== */}
-      <section className="bg-[#f4f1e8] px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <motion.div {...fadeUp} className="mx-auto max-w-2xl text-center">
-            <SectionLabel>Impact of a Volunteer</SectionLabel>
-            <h2 className="text-[clamp(2rem,4vw,3.6rem)] font-[720] leading-[0.95]">Small actions. Real outcomes.</h2>
-            <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-[#5a665e]">
-              One person showing up consistently creates change that reaches far beyond a single act.
-            </p>
-          </motion.div>
+              {/* Impact chips — below CTAs on desktop */}
+              <div className="mt-10 flex flex-wrap gap-2">
+                {impactCards.filter((_, i) => i !== 1).map((card) => (
+                  <span key={card.label} className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/8 px-3 py-1.5 text-[0.55rem] font-black uppercase tracking-[0.1em] text-white/60 backdrop-blur">
+                    <span className="text-[var(--sun)]">{card.value}</span>
+                    {card.label}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {impactCards.map((card, i) => {
-              const Icon = card.icon;
-              return (
-                <motion.div
-                  key={card.label}
-                  {...fadeUp}
-                  transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                  className="rounded-[1.4rem] bg-white p-5 quiet-shadow"
-                >
-                  <Icon size={22} className="text-[var(--leaf)]" />
-                  <div className="mt-3 text-3xl font-black text-[var(--leaf-deep)]">{card.value}</div>
-                  <p className="mt-1 text-sm font-extrabold text-[var(--ink)]">{card.label}</p>
-                  <p className="mt-2 text-xs leading-6 text-[#5a665e]">{card.desc}</p>
-                </motion.div>
-              );
-            })}
+            {/* RIGHT — volunteer photo + spotlight card (renders first on mobile) */}
+            <motion.div
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: 0.15 }}
+              className="relative lg:order-2"
+            >
+              <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#2a4a35] media-shadow">
+                <Image
+                  src="/site-media/photos/In%20the%20classroom%20of%20Bachpanshala.jpg"
+                  alt="Volunteers teaching children at Bachpanshala"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  className="object-cover object-center"
+                />
+              </div>
+
+              {/* Floating spotlight card — bottom-left */}
+              <div className="relative -mt-12 mx-4 sm:-mt-16 sm:mx-6 lg:absolute lg:bottom-5 lg:left-5 lg:mx-0 lg:-mt-0 lg:max-w-xs">
+                <div className="rounded-2xl border border-white/15 bg-white/12 backdrop-blur-xl p-4 shadow-2xl sm:p-5">
+                  <p className="text-[0.5rem] font-black uppercase tracking-[0.15em] text-[var(--sun)]">
+                    Volunteer Spotlight
+                  </p>
+                  <blockquote className="mt-1.5 text-xs leading-5 text-white/80 sm:text-sm sm:leading-6">
+                    &ldquo;Every Sunday, volunteers turn a simple classroom into a place where children feel seen, heard, and supported.&rdquo;
+                  </blockquote>
+                  <p className="mt-1.5 text-[0.55rem] font-bold tracking-[0.06em] text-white/50">
+                    &mdash; WeCare Volunteer
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ===== SECTION 3 — REAL VOLUNTEER STORIES ===== */}
+      {/* ===== SECTION 2 — REAL VOLUNTEER STORIES ===== */}
       <section id="volunteer-stories" className="scroll-mt-20 px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <motion.div {...fadeUp} className="mx-auto max-w-2xl text-center">
@@ -283,7 +308,7 @@ function VolunteerContent() {
         </div>
       </section>
 
-      {/* ===== SECTION 4 — VOLUNTEER APPLICATION FORM ===== */}
+      {/* ===== SECTION 3 — VOLUNTEER APPLICATION FORM ===== */}
       <section id="volunteer-form" ref={formRef} className="scroll-mt-20 bg-[#f4f1e8] px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-[0.44fr_0.56fr] lg:items-start">
@@ -326,7 +351,19 @@ function VolunteerContent() {
 
             {/* RIGHT — form */}
             <motion.div {...fadeUp}>
-              {!submitted ? (
+              {submitError ? (
+                <div className="rounded-[2rem] border border-black/8 bg-white p-8 text-center quiet-shadow sm:p-12">
+                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--rose)]">
+                    <span className="text-2xl font-black text-white">!</span>
+                  </div>
+                  <h3 className="mt-5 text-2xl font-[700] text-[var(--ink)]">Submission failed</h3>
+                  <p className="mx-auto mt-3 max-w-md text-base leading-7 text-[#5a665e]">{submitError}</p>
+                  <button type="button" onClick={() => setSubmitError(null)} className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
+                    Try Again
+                    <ArrowRight size={18} />
+                  </button>
+                </div>
+              ) : !submitted ? (
                 <div className="rounded-[2rem] border border-black/8 bg-white p-4 quiet-shadow sm:p-6">
                   <div className="flex items-center gap-3 border-b border-black/8 pb-5">
                     <span className="grid h-12 w-12 place-items-center rounded-full bg-[#f1c84b]/24 text-[var(--leaf-deep)]">
@@ -342,8 +379,8 @@ function VolunteerContent() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Full Name <span className="text-[var(--rose)]">*</span></label>
-                        <input type="text" placeholder="Your full name" value={formData.name} onChange={handleChange("name")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
-                        {errors.name && <p className="mt-1 text-xs text-[var(--rose)]">{errors.name}</p>}
+                        <input type="text" placeholder="Your full name" value={formData.fullName} onChange={handleChange("fullName")} className="w-full rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] placeholder:text-[#8a928a] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30" />
+                        {errors.fullName && <p className="mt-1 text-xs text-[var(--rose)]">{errors.fullName}</p>}
                       </div>
                       <div>
                         <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Phone Number <span className="text-[var(--rose)]">*</span></label>
@@ -379,7 +416,7 @@ function VolunteerContent() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Interest Area <span className="text-[var(--rose)]">*</span></label>
-                        <select value={formData.interest} onChange={handleChange("interest")} className="w-full appearance-none rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30">
+                        <select value={formData.interestArea} onChange={handleChange("interestArea")} className="w-full appearance-none rounded-2xl border border-black/8 bg-[#fbfaf4] px-4 py-3 text-sm text-[var(--ink)] outline-none focus:ring-2 focus:ring-[var(--leaf)]/30">
                           <option value="">Select an area</option>
                           <option value="Education">Education</option>
                           <option value="Women Empowerment">Women Empowerment</option>
@@ -388,7 +425,7 @@ function VolunteerContent() {
                           <option value="Community Events">Community Events</option>
                           <option value="Any Area">Any Area</option>
                         </select>
-                        {errors.interest && <p className="mt-1 text-xs text-[var(--rose)]">{errors.interest}</p>}
+                        {errors.interestArea && <p className="mt-1 text-xs text-[var(--rose)]">{errors.interestArea}</p>}
                       </div>
                       <div>
                         <label className="mb-1 block text-xs font-black uppercase tracking-[0.12em] text-[#667066]">Availability <span className="text-[var(--rose)]">*</span></label>
@@ -455,7 +492,7 @@ function VolunteerContent() {
         </div>
       </section>
 
-      {/* ===== SECTION 5 — FAQ ===== */}
+      {/* ===== SECTION 4 — FAQ ===== */}
       <section className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <motion.div {...fadeUp} className="text-center">
@@ -470,7 +507,7 @@ function VolunteerContent() {
         </div>
       </section>
 
-      {/* ===== SECTION 6 — FINAL CTA ===== */}
+      {/* ===== SECTION 5 — FINAL CTA ===== */}
       <section className="px-4 pb-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <motion.div {...fadeUp} className="relative overflow-hidden rounded-[2rem] bg-[var(--ink)] px-6 py-14 text-center text-white sm:px-12 sm:py-20">

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
-import { ArrowRight, Heart, Users, Sparkles, ShieldCheck, BookOpen, PawPrint, MapPin, Play, Camera } from "lucide-react";
+import { ArrowRight, Heart, Users, Sparkles, ShieldCheck, BookOpen, PawPrint, Leaf, MapPin, Play, Camera } from "lucide-react";
 import { programs, impactStats, gallery } from "@/content/site-content";
 import { brand } from "@/content/brand";
 
@@ -65,6 +65,105 @@ function AutoPlayVideo({ src, poster }: { src: string; poster?: string }) {
   return <video ref={ref} src={src} poster={poster} muted loop playsInline className="h-full w-full object-cover" />;
 }
 
+function TimelineDot() {
+  return (
+    <div className="h-5 w-5 shrink-0 rounded-full border-2 border-[var(--leaf)] bg-white flex items-center justify-center">
+      <div className="h-2 w-2 rounded-full bg-[var(--leaf)]" />
+    </div>
+  );
+}
+
+function YearBadge({ year }: { year: string }) {
+  return (
+    <span className="shrink-0 inline-flex rounded-full bg-[#F6F0D8] px-3 py-0.5 text-[0.6rem] font-semibold text-[#2E6E4E]">{year}</span>
+  );
+}
+
+function Marker({ year, side }: { year: string; side: "left" | "right" }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      {side === "left" ? (
+        <>
+          <YearBadge year={year} />
+          <TimelineDot />
+        </>
+      ) : (
+        <>
+          <TimelineDot />
+          <YearBadge year={year} />
+        </>
+      )}
+    </div>
+  );
+}
+
+function TimelineItem({ index, entry, Icon }: { index: number; entry: { year: string; title: string; desc: string }; Icon: React.ComponentType<{ size: number; className?: string }> }) {
+  const isLeft = index % 2 === 0;
+  return (
+    <motion.div
+      {...fadeUp}
+      transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+      className="relative mb-8 pl-14 lg:mb-20 lg:pb-10 lg:pl-0 lg:grid lg:grid-cols-[1fr_20px_1fr] lg:gap-x-1.5 lg:items-start"
+    >
+      {/* Desktop column 1 — content for even, empty for odd */}
+      <div className="hidden lg:flex lg:flex-col">
+        {isLeft && (
+          <div className="flex justify-end">
+            <div className="flex items-start gap-3 max-w-md">
+              <div className="flex flex-col items-end text-right">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE]">
+                  <Icon size={20} className="text-[var(--leaf-deep)]" />
+                </div>
+                <h3 className="mt-3 text-xl font-extrabold leading-snug">{entry.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
+              </div>
+              <YearBadge year={entry.year} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop column 2 — dot on timeline */}
+      <div className="hidden lg:flex lg:justify-center">
+        <TimelineDot />
+      </div>
+
+      {/* Desktop column 3 — content for odd, empty for even */}
+      <div className="hidden lg:flex lg:flex-col">
+        {!isLeft && (
+          <div className="flex justify-start">
+            <div className="flex items-start gap-3 max-w-md">
+              <YearBadge year={entry.year} />
+              <div className="flex flex-col items-start text-left">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE]">
+                  <Icon size={20} className="text-[var(--leaf-deep)]" />
+                </div>
+                <h3 className="mt-3 text-xl font-extrabold leading-snug">{entry.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile layout */}
+      <div className="lg:hidden">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE] mb-3">
+          <Icon size={20} className="text-[var(--leaf-deep)]" />
+        </div>
+        <YearBadge year={entry.year} />
+        <h3 className="mt-1 text-xl font-extrabold leading-snug">{entry.title}</h3>
+        <p className="mt-1 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
+      </div>
+
+      {/* Mobile marker — dot on line */}
+      <div className="lg:hidden absolute left-3 top-1.5">
+        <TimelineDot />
+      </div>
+    </motion.div>
+  );
+}
+
 function AboutContent() {
   return (
     <>
@@ -100,36 +199,34 @@ function AboutContent() {
 
       {/* ===== 2. JOURNEY TIMELINE ===== */}
       <section className="px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <motion.div {...fadeUp} className="text-center">
             <SectionLabel>Our Journey</SectionLabel>
-            <h2 className="text-[clamp(2rem,4vw,3.6rem)] font-[720] leading-[0.95]">2020 \u2192 Today</h2>
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--leaf)]/25 bg-[var(--leaf)]/8 px-3 py-1 text-[0.55rem] font-black uppercase tracking-[0.18em] text-[var(--leaf-deep)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--leaf)] animate-pulse" />
+              2020 — Present
+            </div>
+            <h2 className="text-[clamp(2rem,4vw,3.6rem)] font-[720] leading-[0.95]">Five Years of Showing Up.</h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-[#5a665e]">
-              Five years of showing up, learning, and growing alongside the communities we serve.
+              From one classroom to a growing community movement. Every milestone below represents people who chose to show up, volunteer, teach, support, and care.
             </p>
           </motion.div>
 
           <div className="relative mt-12">
-            <div className="absolute left-5 top-0 h-full w-px bg-[#dfe6d6] lg:left-1/2 lg:-translate-x-px" />
-            {timeline.map((entry, i) => (
-              <motion.div
-                key={entry.year}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                className={`relative mb-8 pl-14 lg:mb-12 lg:w-1/2 ${
-                  i % 2 === 0 ? "lg:ml-0 lg:pr-10 lg:pl-0 lg:text-right" : "lg:ml-auto lg:pl-10"
-                }`}
-              >
-                <div className={`absolute left-3 top-1.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[var(--leaf)] bg-white lg:left-auto ${
-                  i % 2 === 0 ? "lg:right-[-10.5px]" : "lg:left-[-10.5px]"
-                }`}>
-                  <div className="h-2 w-2 rounded-full bg-[var(--leaf)]" />
-                </div>
-                <span className="inline-flex rounded-full bg-[#f1c84b]/18 px-2.5 py-0.5 text-[0.6rem] font-black uppercase tracking-[0.12em] text-[var(--leaf-deep)]">{entry.year}</span>
-                <h3 className="mt-2 text-xl font-extrabold leading-snug">{entry.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
-              </motion.div>
-            ))}
+            <div className="absolute left-5 top-0 h-full w-px bg-[#dfe6d6] lg:left-1/2" />
+
+            {timeline.map((entry, i) => {
+              const Icon = [BookOpen, Heart, PawPrint, Leaf, Sparkles, Sparkles][i];
+
+              return (
+                <TimelineItem
+                  key={entry.year}
+                  index={i}
+                  entry={entry}
+                  Icon={Icon}
+                />
+              );
+            })}
           </div>
         </div>
       </section>
@@ -149,9 +246,12 @@ function AboutContent() {
             {programs.map((program, i) => {
               const icons = [BookOpen, Heart, PawPrint, MapPin];
               const Icon = icons[i];
+              const sectionIds = ["bachpanshala", "women-empowerment", "animal-welfare", "jagriti-clean-drives"];
               return (
                 <motion.article
                   key={program.title}
+                  id={sectionIds[i]}
+                  style={{ scrollMarginTop: "100px" }}
                   {...fadeUp}
                   transition={{ ...fadeUp.transition, delay: i * 0.06 }}
                   className="group flex flex-col overflow-hidden rounded-[1.4rem] border border-black/8 bg-white quiet-shadow transition duration-500 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(30,48,39,0.14)] sm:flex-row"

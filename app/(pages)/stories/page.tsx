@@ -167,7 +167,7 @@ function StoriesHero() {
           </div>
           <div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-[1.2rem] bg-[#3a5a45] media-shadow">
-              <Image src="/site-media/photos/01-c-ffn9xv27m.jpg" alt="A WeCare volunteer teaching children at Bachpanshala" fill sizes="40vw" className="object-cover" />
+              <Image src="/site-media/photos/In%20the%20classroom%20of%20Bachpanshala.jpg" alt="In the classroom of Bachpanshala — children learning, faces visible, real impact" fill sizes="40vw" className="object-cover object-[center_40%]" />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-5 pt-12">
                 <p className="text-sm font-medium leading-snug text-white/90 italic">&ldquo;We came to teach. We stayed to learn.&rdquo;</p>
               </div>
@@ -264,18 +264,17 @@ function FeaturedStory() {
 }
 
 function StoryChapter({ chapter, index }: { chapter: (typeof chapterData)[number]; index: number }) {
-  const [expanded, setExpanded] = useState(false);
   const isReversed = index % 2 === 1;
 
   return (
     <motion.div {...fadeUp}>
-      <div className={`grid gap-8 lg:grid-cols-2 lg:items-center ${isReversed ? "" : ""}`}>
-        <div className={`${isReversed ? "lg:order-2" : ""}`}>
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+        <div className={`space-y-3 ${isReversed ? "lg:order-2" : ""}`}>
           <div className="relative aspect-[4/3] overflow-hidden rounded-[1.4rem] bg-[#dfe6d6] media-shadow">
             <Image src={chapter.image} alt={chapter.title} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
           </div>
           {chapter.image2 !== chapter.image && (
-            <div className={`relative mt-[-1.5rem] ${isReversed ? "ml-auto mr-3" : "ml-3"} w-3/5 overflow-hidden rounded-[1rem] border-4 border-white bg-[#dfe6d6] quiet-shadow`}>
+            <div className={`relative ${isReversed ? "ml-auto mr-3" : "ml-3"} w-3/5 overflow-hidden rounded-[1rem] border-4 border-white bg-[#dfe6d6] -mt-6 quiet-shadow`}>
               <div className="relative aspect-[4/3]">
                 <Image src={chapter.image2} alt={`${chapter.title} additional`} fill sizes="30vw" className="object-cover" />
               </div>
@@ -283,63 +282,39 @@ function StoryChapter({ chapter, index }: { chapter: (typeof chapterData)[number
           )}
         </div>
 
-        <div className={`${isReversed ? "lg:order-1" : ""}`}>
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-[#f1c84b]/18 px-3 py-1 text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--leaf-deep)]">
-            <span className="h-2 w-2 rounded-full bg-[var(--sun)]" />
-            {chapter.kicker}
+        <div className={`flex flex-col gap-5 ${isReversed ? "lg:order-1" : ""}`}>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[var(--rose)]">{chapter.kicker}</p>
+            <h3 className="mt-2 text-[clamp(1.6rem,3vw,2.8rem)] font-[720] leading-[0.98]">{chapter.title}</h3>
           </div>
-          <h3 className="text-[clamp(1.6rem,3vw,2.8rem)] font-[720] leading-[0.98]">{chapter.title}</h3>
-          <p className="mt-4 leading-7 text-[#5c665e]">{chapter.preview}</p>
 
-          <div className="mt-5 rounded-[1.2rem] border-l-4 border-[var(--leaf)] bg-[#f4f1e8] p-4">
-            <Quote size={16} className="mb-1 text-[var(--leaf)]" />
+          <div className="space-y-4 text-base leading-7 text-[#4f5d54]">
+            <p>{chapter.preview}</p>
+            <p>{chapter.full}</p>
+          </div>
+
+          <div className="rounded-[1.2rem] border-l-4 border-[var(--leaf)] bg-[#f4f1e8] p-5">
+            <Quote size={18} className="mb-2 text-[var(--leaf)]" />
             <p className="text-sm font-bold leading-6 italic text-[#4f5d54]">&ldquo;{chapter.quote}&rdquo;</p>
             <p className="mt-2 text-xs font-black uppercase tracking-[0.1em] text-[var(--leaf-deep)]">{chapter.quoteName}</p>
           </div>
 
-          <div className="mt-4 flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <span className="rounded-full bg-[#f1c84b]/22 px-3 py-1 text-xs font-black text-[var(--leaf-deep)]">{chapter.impact}</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--leaf)]/20 bg-[var(--leaf)]/8 px-2.5 py-1 text-[0.45rem] font-black uppercase tracking-[0.12em] text-[var(--leaf-deep)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#E1306C] animate-pulse" />
+              Real story
+            </span>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setExpanded(!expanded)}
-            className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]"
-          >
-            {expanded ? "Show Less" : "Read More"}
-            <ArrowRight size={18} className={`transition ${expanded ? "rotate-90" : ""}`} />
-          </button>
+          <div className="mt-2">
+            <ButtonLink href={brand.donationUrl}>
+              Support {chapter.title}
+              <ArrowRight size={18} />
+            </ButtonLink>
+          </div>
         </div>
       </div>
-
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-            className="overflow-hidden"
-          >
-            <div className="mt-6 rounded-[1.4rem] border border-black/8 bg-[#fbfaf4] p-6 sm:p-8">
-              <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-                <div className="space-y-4 text-base leading-7 text-[#4f5d54]">
-                  <p>{chapter.full}</p>
-                  <div className="mt-4">
-                    <ButtonLink href={brand.donationUrl}>
-                      Support {chapter.title}
-                      <ArrowRight size={18} />
-                    </ButtonLink>
-                  </div>
-                </div>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem] bg-[#dfe6d6]">
-                  <Image src={chapter.image2} alt={chapter.title} fill sizes="40vw" className="object-cover" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   );
 }
@@ -356,7 +331,7 @@ function StoryChapters() {
           </p>
         </motion.div>
 
-        <div className="space-y-20">
+        <div className="space-y-24">
           {chapterData.map((chapter, index) => (
             <StoryChapter key={chapter.title} chapter={chapter} index={index} />
           ))}

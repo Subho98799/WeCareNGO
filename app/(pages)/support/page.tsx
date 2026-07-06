@@ -123,8 +123,6 @@ function SupportSection({ presetAmount }: { presetAmount: string }) {
   const [showQR, setShowQR] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxteEs-Rm-Ofl54eftJxRXDoaWe7mdvTnZ8b0yPfn7kOwx0Ek826d5AHxx5vchh4UYS/exec";
-
   useEffect(() => {
     if (presetAmount) {
       setFormData((prev) => ({ ...prev, amount: presetAmount }));
@@ -169,20 +167,27 @@ function SupportSection({ presetAmount }: { presetAmount: string }) {
   const handlePaymentComplete = async () => {
     setShowQR(false);
     setShowSuccess(true);
+    const payload = {
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      amount: formData.amount,
+      message: formData.message,
+    };
+    console.log("Support payload:", payload);
     try {
-      await fetch(GOOGLE_SCRIPT_URL, {
+      const response = await fetch("/api/support", {
         method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          amount: formData.amount,
-          message: formData.message,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
-    } catch {
-      // no-cors ignores response; failure is silent
+      const data = await response.json();
+      console.log("Support proxy response:", data);
+      if (!data.success) {
+        console.error("Support submission failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Support submission error:", err);
     }
   };
 
