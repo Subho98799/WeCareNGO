@@ -65,6 +65,105 @@ function AutoPlayVideo({ src, poster }: { src: string; poster?: string }) {
   return <video ref={ref} src={src} poster={poster} muted loop playsInline className="h-full w-full object-cover" />;
 }
 
+function TimelineDot() {
+  return (
+    <div className="h-5 w-5 shrink-0 rounded-full border-2 border-[var(--leaf)] bg-white flex items-center justify-center">
+      <div className="h-2 w-2 rounded-full bg-[var(--leaf)]" />
+    </div>
+  );
+}
+
+function YearBadge({ year }: { year: string }) {
+  return (
+    <span className="shrink-0 inline-flex rounded-full bg-[#F6F0D8] px-3 py-0.5 text-[0.6rem] font-semibold text-[#2E6E4E]">{year}</span>
+  );
+}
+
+function Marker({ year, side }: { year: string; side: "left" | "right" }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      {side === "left" ? (
+        <>
+          <YearBadge year={year} />
+          <TimelineDot />
+        </>
+      ) : (
+        <>
+          <TimelineDot />
+          <YearBadge year={year} />
+        </>
+      )}
+    </div>
+  );
+}
+
+function TimelineItem({ index, entry, Icon }: { index: number; entry: { year: string; title: string; desc: string }; Icon: React.ComponentType<{ size: number; className?: string }> }) {
+  const isLeft = index % 2 === 0;
+  return (
+    <motion.div
+      {...fadeUp}
+      transition={{ ...fadeUp.transition, delay: index * 0.08 }}
+      className="relative mb-8 pl-14 lg:mb-20 lg:pb-10 lg:pl-0 lg:grid lg:grid-cols-[1fr_20px_1fr] lg:gap-x-1.5 lg:items-start"
+    >
+      {/* Desktop column 1 — content for even, empty for odd */}
+      <div className="hidden lg:flex lg:flex-col">
+        {isLeft && (
+          <div className="flex justify-end">
+            <div className="flex items-start gap-3 max-w-md">
+              <div className="flex flex-col items-end text-right">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE]">
+                  <Icon size={20} className="text-[var(--leaf-deep)]" />
+                </div>
+                <h3 className="mt-3 text-xl font-extrabold leading-snug">{entry.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
+              </div>
+              <YearBadge year={entry.year} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop column 2 — dot on timeline */}
+      <div className="hidden lg:flex lg:justify-center">
+        <TimelineDot />
+      </div>
+
+      {/* Desktop column 3 — content for odd, empty for even */}
+      <div className="hidden lg:flex lg:flex-col">
+        {!isLeft && (
+          <div className="flex justify-start">
+            <div className="flex items-start gap-3 max-w-md">
+              <YearBadge year={entry.year} />
+              <div className="flex flex-col items-start text-left">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE]">
+                  <Icon size={20} className="text-[var(--leaf-deep)]" />
+                </div>
+                <h3 className="mt-3 text-xl font-extrabold leading-snug">{entry.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile layout */}
+      <div className="lg:hidden">
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE] mb-3">
+          <Icon size={20} className="text-[var(--leaf-deep)]" />
+        </div>
+        <YearBadge year={entry.year} />
+        <h3 className="mt-1 text-xl font-extrabold leading-snug">{entry.title}</h3>
+        <p className="mt-1 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
+      </div>
+
+      {/* Mobile marker — dot on line */}
+      <div className="lg:hidden absolute left-3 top-1.5">
+        <TimelineDot />
+      </div>
+    </motion.div>
+  );
+}
+
 function AboutContent() {
   return (
     <>
@@ -114,52 +213,18 @@ function AboutContent() {
           </motion.div>
 
           <div className="relative mt-12">
-            <div className="absolute left-5 top-0 h-full w-px bg-[#dfe6d6] lg:left-1/2 lg:-translate-x-px" />
+            <div className="absolute left-5 top-0 h-full w-px bg-[#dfe6d6] lg:left-1/2" />
+
             {timeline.map((entry, i) => {
               const Icon = [BookOpen, Heart, PawPrint, Leaf, Sparkles, Sparkles][i];
+
               return (
-              <motion.div
-                key={entry.year}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                className={`relative mb-8 pl-14 lg:mb-20 lg:w-1/2 lg:pb-10 ${
-                  i % 2 === 0 ? "lg:ml-0 lg:pr-4 lg:pl-0 lg:text-right" : "lg:ml-auto lg:pl-4"
-                }`}
-              >
-                {/* Desktop — icon + title + description */}
-                <div className="hidden lg:block">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE] ${i % 2 === 0 ? "lg:ml-auto" : ""}`}>
-                    <Icon size={20} className="text-[var(--leaf-deep)]" />
-                  </div>
-                  <h3 className="mt-3 text-xl font-extrabold leading-snug">{entry.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
-                </div>
-
-                {/* Desktop marker — badge + dot at center line (bottom) */}
-                <div className={`hidden lg:flex items-center gap-2 absolute bottom-0 ${
-                  i % 2 === 0 ? "right-[-10px] flex-row-reverse" : "left-[-10px]"
-                }`}>
-                  <span className="shrink-0 inline-flex rounded-full bg-[#F6F0D8] px-3 py-0.5 text-[0.6rem] font-semibold text-[#2E6E4E]">{entry.year}</span>
-                  <div className="h-5 w-5 shrink-0 rounded-full border-2 border-[var(--leaf)] bg-white flex items-center justify-center">
-                    <div className="h-2 w-2 rounded-full bg-[var(--leaf)]" />
-                  </div>
-                </div>
-
-                {/* Mobile — icon + title + description */}
-                <div className="lg:hidden">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F8F6EE] mb-3">
-                    <Icon size={20} className="text-[var(--leaf-deep)]" />
-                  </div>
-                  <span className="inline-flex rounded-full bg-[#F6F0D8] px-3 py-0.5 text-[0.6rem] font-semibold text-[#2E6E4E]">{entry.year}</span>
-                  <h3 className="mt-1 text-xl font-extrabold leading-snug">{entry.title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-[#5a665e]">{entry.desc}</p>
-                </div>
-
-                {/* Mobile marker — dot only */}
-                <div className="lg:hidden absolute left-3 top-1.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[var(--leaf)] bg-white">
-                  <div className="h-2 w-2 rounded-full bg-[var(--leaf)]" />
-                </div>
-              </motion.div>
+                <TimelineItem
+                  key={entry.year}
+                  index={i}
+                  entry={entry}
+                  Icon={Icon}
+                />
               );
             })}
           </div>
