@@ -2,13 +2,9 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Play, Heart, MessageCircle, Calendar } from "lucide-react";
-import { useEffect } from "react";
-import type { GalleryMedia } from "@/lib/gallery-data";
-
-function formatCount(n: number) {
-  return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
-}
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useCallback } from "react";
+import type { CuratedEntry } from "@/content/curated-gallery";
 
 export default function GalleryViewer({
   item,
@@ -18,16 +14,39 @@ export default function GalleryViewer({
   hasPrev,
   hasNext,
 }: {
-  item: GalleryMedia;
+  item: CuratedEntry;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
   hasPrev: boolean;
   hasNext: boolean;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleClose = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.preventDefault();
+      e?.stopPropagation();
+      onClose();
+    },
+    [onClose],
+  );
+
+  const handleBackdrop = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onClose();
+    },
+    [onClose],
+  );
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
       if (e.key === "ArrowLeft" && hasPrev) onPrev();
       if (e.key === "ArrowRight" && hasNext) onNext();
     };
@@ -41,95 +60,74 @@ export default function GalleryViewer({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-2 backdrop-blur-md sm:p-4"
-        onClick={onClose}
+        transition={{ duration: 0.25 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm sm:p-6 lg:p-10"
+        onClick={handleBackdrop}
       >
         <div
-          className="relative flex w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-[#111] shadow-2xl"
+          className="relative flex w-full max-w-5xl flex-col overflow-hidden rounded-xl bg-[#181818]"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="relative flex-1 bg-black">
+          <div className="relative flex items-center justify-center bg-black p-6 sm:p-8 lg:p-10">
             {item.type === "video" ? (
               <video
-                key={item.src}
-                className="max-h-[68vh] w-full object-contain"
+                ref={videoRef}
                 src={item.src}
                 poster={item.poster}
                 controls
                 autoPlay
+                className="max-h-[65vh] w-full rounded"
               />
             ) : (
-              <div className="relative flex items-center justify-center p-4">
-                <Image
-                  src={item.src}
-                  alt={item.title}
-                  width={1200}
-                  height={900}
-                  className="max-h-[68vh] w-auto rounded-lg object-contain"
-                />
-              </div>
+              <Image
+                src={item.src}
+                alt={item.title}
+                width={1200}
+                height={900}
+                className="max-h-[65vh] w-auto rounded object-contain"
+              />
             )}
           </div>
 
-          <div className="border-t border-white/10 bg-[#1a1a1a] px-5 py-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[0.5rem] font-black uppercase tracking-[0.12em] text-white/80 backdrop-blur-md">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#E1306C] animate-pulse" />
-                    {item.category}
-                  </span>
-                </div>
-                <p className="mt-1.5 text-sm font-extrabold text-white">
-                  {item.title}
-                </p>
-                <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-white/50">
-                  <span className="flex items-center gap-1">
-                    <Heart size={13} />
-                    {formatCount(Math.floor(200 + Math.random() * 800))} likes
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <MessageCircle size={13} />
-                    {formatCount(Math.floor(20 + Math.random() * 80))} comments
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Calendar size={13} />
-                    {item.type === "video" ? item.duration : "Photo"}
-                  </span>
-                </div>
-              </div>
+          <div className="flex items-center justify-between bg-black/50 px-5 py-2.5">
+            <div className="min-w-0">
+              <span className="inline-block rounded-full bg-[var(--leaf)]/80 px-2 py-0.5 text-[0.45rem] font-black uppercase tracking-[0.12em] text-white">
+                {item.category}
+              </span>
+              <p className="mt-0.5 text-xs font-extrabold leading-tight text-white/80">
+                {item.title}
+              </p>
+            </div>
 
-              <div className="flex shrink-0 items-center gap-1.5">
-                {hasPrev && (
-                  <button
-                    type="button"
-                    onClick={onPrev}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
-                    aria-label="Previous"
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                )}
-                {hasNext && (
-                  <button
-                    type="button"
-                    onClick={onNext}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
-                    aria-label="Next"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                )}
+            <div className="flex shrink-0 items-center gap-1">
+              {hasPrev && (
                 <button
                   type="button"
-                  onClick={onClose}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-white/10 text-white/70 transition hover:bg-white/20 hover:text-white"
-                  aria-label="Close"
+                  onClick={onPrev}
+                  className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-white/40 transition hover:bg-white/10 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  aria-label="Previous"
                 >
-                  <X size={16} />
+                  <ChevronLeft size={14} />
                 </button>
-              </div>
+              )}
+              {hasNext && (
+                <button
+                  type="button"
+                  onClick={onNext}
+                  className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-white/40 transition hover:bg-white/10 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  aria-label="Next"
+                >
+                  <ChevronRight size={14} />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleClose}
+                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-white/40 transition hover:bg-white/10 hover:text-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                aria-label="Close"
+              >
+                <X size={14} />
+              </button>
             </div>
           </div>
         </div>
