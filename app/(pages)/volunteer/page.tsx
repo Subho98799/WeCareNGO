@@ -51,7 +51,7 @@ const volunteerStories = [
   },
   {
     ...stories[2],
-    quote: "A pair of shoes, a clean shirt, a smile \u2014 that is change you can see.",
+    quote: "A pair of shoes, a clean shirt, a smile that is change you can see.",
   },
 ];
 

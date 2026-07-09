@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ArrowRight, Play, X, Users, HeartHandshake, Quote } from "lucide-react";
 import { brand } from "@/content/brand";
 import { stories } from "@/content/site-content";
@@ -34,22 +35,26 @@ function ButtonLink({
   variant?: "primary" | "secondary" | "ghost";
   className?: string;
 }) {
-  const btnClass =
+  const cls = `focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${
     variant === "primary"
       ? "bg-[var(--leaf)] text-white hover:bg-[var(--leaf-deep)]"
       : variant === "secondary"
         ? "bg-white/88 text-[var(--ink)] ring-1 ring-black/10 hover:bg-white"
-        : "bg-transparent text-[var(--ink)] hover:bg-black/5";
+        : "bg-transparent text-[var(--ink)] hover:bg-black/5"
+  } ${extraClass}`;
+
+  if (href.startsWith("http") || href.startsWith("mailto") || href.startsWith("tel")) {
+    return (
+      <a className={cls} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
 
   return (
-    <a
-      className={`focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${btnClass} ${extraClass}`}
-      href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noreferrer" : undefined}
-    >
+    <Link className={cls} href={href}>
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -377,6 +382,34 @@ function VoicesSection() {
 function VideoStoriesSection() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
+  const handleClose = useCallback(
+    (e?: React.MouseEvent | KeyboardEvent) => {
+      e?.preventDefault();
+      e?.stopPropagation();
+      setActiveVideo(null);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!activeVideo) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        setActiveVideo(null);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    history.pushState(null, "");
+    const onPopState = () => setActiveVideo(null);
+    window.addEventListener("popstate", onPopState);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      window.removeEventListener("popstate", onPopState);
+    };
+  }, [activeVideo]);
+
   return (
     <section className="px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -424,7 +457,7 @@ function VideoStoriesSection() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 p-2 sm:p-4"
-            onClick={() => setActiveVideo(null)}
+            onClick={handleClose}
           >
             <div className="relative flex w-full max-w-5xl items-center justify-center" onClick={(e) => e.stopPropagation()}>
                 <video
@@ -437,7 +470,7 @@ function VideoStoriesSection() {
                 />
               <button
                 type="button"
-                onClick={() => setActiveVideo(null)}
+                onClick={handleClose}
                 className="absolute -top-10 right-0 flex items-center gap-2 rounded-full bg-white/12 px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
               >
                 <X size={14} />

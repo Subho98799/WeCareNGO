@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import type { CuratedEntry } from "@/content/curated-gallery";
 import { editorialImages as allPhotos, videos as allVideos } from "@/content/curated-gallery";
 import GalleryHero from "./components/GalleryHero";
+import GalleryFilters from "./components/GalleryFilters";
 import EditorialGrid from "./components/EditorialGrid";
 import StoriesInMotion from "./components/StoriesInMotion";
 import GalleryViewer from "./components/GalleryViewer";
@@ -15,17 +16,52 @@ export default function GalleryClient({ archiveItems }: { archiveItems: CuratedE
   const [loadCount, setLoadCount] = useState(0);
   const [viewerIdx, setViewerIdx] = useState<number | null>(null);
   const [videoViewer, setVideoViewer] = useState<CuratedEntry | null>(null);
+  const [activeCategory, setActiveCategory] = useState("All");
 
   const allVisible = useMemo(() => {
-    if (loadCount === 0) return allPhotos;
-    return [...allPhotos, ...archiveItems.slice(0, loadCount)];
-  }, [loadCount, archiveItems]);
+    const items = loadCount === 0 ? allPhotos : [...allPhotos, ...archiveItems.slice(0, loadCount)];
+    if (activeCategory === "All") return items;
+    return items.filter((item) => item.category === activeCategory);
+  }, [loadCount, archiveItems, activeCategory]);
 
-  const hasMore = loadCount < archiveItems.length;
+  const filteredVideos = useMemo(() => {
+    if (activeCategory === "All") return allVideos;
+    return allVideos.filter((v) => v.category === activeCategory);
+  }, [activeCategory]);
+
+  const hasMore = useMemo(() => {
+    const archiveInCategory: CuratedEntry[] =
+      activeCategory === "All"
+        ? archiveItems
+        : archiveItems.filter((item) => item.category === activeCategory);
+    const loadedArchiveOfCategory = archiveItems
+      .slice(0, loadCount)
+      .filter((item) => activeCategory === "All" || item.category === activeCategory)
+      .length;
+    return loadedArchiveOfCategory < archiveInCategory.length;
+  }, [archiveItems, activeCategory, loadCount]);
+
+  const isViewerOpen = viewerIdx !== null || videoViewer !== null;
+  const closeAllViewers = useCallback(() => {
+    setViewerIdx(null);
+    setVideoViewer(null);
+  }, []);
+
+  useEffect(() => {
+    if (!isViewerOpen) return;
+    history.pushState(null, "");
+    window.addEventListener("popstate", closeAllViewers);
+    return () => window.removeEventListener("popstate", closeAllViewers);
+  }, [isViewerOpen, closeAllViewers]);
 
   const handleLoadMore = useCallback(() => {
     setLoadCount((prev) => Math.min(prev + ARCHIVE_PAGE, archiveItems.length));
   }, [archiveItems.length]);
+
+  const handleCategoryChange = useCallback((cat: string) => {
+    setActiveCategory(cat);
+    setViewerIdx(null);
+  }, []);
 
   const currentViewerItem =
     viewerIdx !== null && viewerIdx < allVisible.length
@@ -34,9 +70,13 @@ export default function GalleryClient({ archiveItems }: { archiveItems: CuratedE
 
   return (
     <>
-      <div className="pt-6 lg:pt-8" />
+      <div className="pt-16 lg:pt-20" />
 
       <GalleryHero />
+
+      <div className="pt-6 lg:pt-8" />
+
+      <GalleryFilters active={activeCategory} onChange={handleCategoryChange} />
 
       <div className="pt-6 lg:pt-8" />
 
@@ -48,7 +88,7 @@ export default function GalleryClient({ archiveItems }: { archiveItems: CuratedE
       <div className="pt-14 lg:pt-16" />
 
       <StoriesInMotion
-        videos={allVideos}
+        videos={filteredVideos}
         onPlay={(video) => setVideoViewer(video)}
       />
 

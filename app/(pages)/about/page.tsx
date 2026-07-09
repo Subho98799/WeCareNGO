@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { ArrowRight, Heart, Users, Sparkles, ShieldCheck, BookOpen, PawPrint, Leaf, MapPin, Play, Camera } from "lucide-react";
@@ -15,19 +16,19 @@ const fadeUp = {
 } as const;
 
 const timeline = [
-  { year: "2020", title: "One classroom, one belief", desc: "WeCare started in Bhopal with Bachpanshala \u2014 a free weekend classroom for children who had no access to learning support. No funding. No space. Just people who believed showing up was enough." },
-  { year: "2021", title: "First women\u2019s health workshop", desc: "A conversation about menstruation turned into a regular workshop series. Women who had never spoken about their health in public found a safe space to ask, learn, and lead." },
-  { year: "2022", title: "Animal welfare became a program", desc: "What started as feeding strays on volunteer routes became a structured effort \u2014 regular feeding rounds, emergency vet support, and a growing network of animal caregivers." },
+  { year: "2020", title: "One classroom, one belief", desc: "WeCare started in Bhopal with Bachpanshala a free weekend classroom for children who had no access to learning support. No funding. No space. Just people who believed showing up was enough." },
+  { year: "2021", title: "First women's health workshop", desc: "A conversation about menstruation turned into a regular workshop series. Women who had never spoken about their health in public found a safe space to ask, learn, and lead." },
+  { year: "2022", title: "Animal welfare became a program", desc: "What started as feeding strays on volunteer routes became a structured effort regular feeding rounds, emergency vet support, and a growing network of animal caregivers." },
   { year: "2023", title: "JAGRITI cleanliness drives launched", desc: "Volunteers gathered to clean public spaces. One drive at Manuabhan Tekri collected 175 kg of plastic in a single morning. The initiative gave a name to WeCare\u2019s environmental work." },
   { year: "2024", title: "19 medals at Raahat Khel Mela", desc: "Children from Bachpanshala won 19 medals at a district-level sports event. For a program that started with no budget, those medals proved what consistent care can unlock." },
   { year: "2025", title: "Still showing up", desc: "Five years in, WeCare runs across education, women empowerment, animal welfare, and community drives. Still volunteer-powered. Still in Bhopal. Still showing up every week." },
 ];
 
 const coreValues = [
-  { icon: Heart, title: "We Show Up", desc: "Consistency matters more than scale. We keep returning \u2014 to classrooms, to streets, to conversations \u2014 long after the initial energy fades." },
+  { icon: Heart, title: "We Show Up", desc: "Consistency matters more than scale. We keep returning to classrooms, to streets, to conversations long after the initial energy fades." },
   { icon: Users, title: "People First", desc: "Every decision starts with the person in front of us. A child who needs to learn. A woman who needs to speak. An animal that needs care." },
   { icon: Sparkles, title: "Community Driven", desc: "We do not build programs in isolation. Volunteers, local residents, and participants shape what we do and how we do it." },
-  { icon: ShieldCheck, title: "Transparency", desc: "Our work is documented openly on Instagram. Every drive, every classroom session, every rupee donated \u2014 shared publicly, no filters." },
+  { icon: ShieldCheck, title: "Transparency", desc: "Our work is documented openly on Instagram. Every drive, every classroom session, every rupee donated shared publicly, no filters." },
 ];
 
 const trustCards = [
@@ -185,10 +186,10 @@ function AboutContent() {
               What started as a single weekend classroom in Bhopal has grown into a movement across education, women empowerment, animal welfare, and community care. Powered entirely by volunteers who decided to act.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="/volunteer" className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
+              <Link href="/volunteer" className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
                 Become a Volunteer
                 <ArrowRight size={18} />
-              </a>
+              </Link>
               <a href={brand.donationUrl} className="inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2.5 text-sm font-black text-white uppercase tracking-[0.02em] backdrop-blur transition-colors hover:bg-white/25">
                 Support Our Work
               </a>
@@ -362,7 +363,7 @@ function AboutContent() {
             <SectionLabel>Real Moments</SectionLabel>
             <h2 className="text-[clamp(2rem,4vw,3.6rem)] font-[720] leading-[0.95]">Proof, not promises.</h2>
             <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-[#5a665e]">
-              Every photo and video here is from real field work \u2014 shared publicly on Instagram since 2020.
+              Every photo and video here is from real field work shared publicly on Instagram since 2020.
             </p>
           </motion.div>
 
@@ -441,10 +442,10 @@ function AboutContent() {
                 You can be part of what happens next. Whether you volunteer your time or support the work, every action adds to the story.
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <a href="/volunteer" className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-6 py-3 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
+                <Link href="/volunteer" className="inline-flex items-center gap-2 rounded-full bg-[var(--leaf)] px-6 py-3 text-sm font-black text-white uppercase tracking-[0.02em] transition-colors hover:bg-[var(--leaf-deep)]">
                   Become a Volunteer
                   <ArrowRight size={18} />
-                </a>
+                </Link>
                 <a href={brand.donationUrl} className="inline-flex items-center gap-2 rounded-full bg-white/15 px-6 py-3 text-sm font-black text-white uppercase tracking-[0.02em] backdrop-blur transition-colors hover:bg-white/25">
                   Support Our Work
                 </a>

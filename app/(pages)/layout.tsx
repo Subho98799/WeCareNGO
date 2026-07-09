@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   HeartHandshake,
@@ -12,11 +13,11 @@ import { useState } from "react";
 import { brand } from "@/content/brand";
 
 const navLinks = [
+  { href: "/about", label: "About" },
   { href: "/work", label: "Work" },
   { href: "/stories", label: "Stories" },
   { href: "/gallery", label: "Gallery" },
   { href: "/volunteer", label: "Volunteer" },
-  { href: "/about", label: "About" },
   { href: "/support", label: "Support Us" },
 ];
 
@@ -31,22 +32,26 @@ function ButtonLink({
   variant?: "primary" | "secondary" | "ghost";
   className?: string;
 }) {
-  const className =
+  const cls = `focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${
     variant === "primary"
       ? "bg-[var(--leaf)] text-white hover:bg-[var(--leaf-deep)]"
       : variant === "secondary"
         ? "bg-white/88 text-[var(--ink)] ring-1 ring-black/10 hover:bg-white"
-        : "bg-transparent text-[var(--ink)] hover:bg-black/5";
+        : "bg-transparent text-[var(--ink)] hover:bg-black/5"
+  } ${extraClass}`;
+
+  if (href.startsWith("http") || href.startsWith("mailto") || href.startsWith("tel")) {
+    return (
+      <a className={cls} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
 
   return (
-    <a
-      className={`focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${className} ${extraClass}`}
-      href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noreferrer" : undefined}
-    >
+    <Link className={cls} href={href}>
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -56,22 +61,22 @@ function Header() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 px-3 py-3">
       <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/60 bg-white/78 px-3 py-2 shadow-[0_18px_60px_rgba(23,35,27,0.12)] backdrop-blur-xl">
-        <a className="focus-ring flex items-center gap-3 rounded-full pr-2" href="/">
+        <Link className="focus-ring flex items-center gap-3 rounded-full pr-2" href="/">
           <span className="relative h-14 w-14 overflow-hidden">
             <Image
               src="/site-media/photos/Logo.PNG"
-              alt="WeCare NGO logo"
+              alt="We Care Social Welfare Society logo"
               fill
               className="object-contain"
             />
           </span>
           <span className="hidden text-sm font-black sm:block">{brand.name}</span>
-        </a>
+        </Link>
         <div className="hidden items-center gap-1 text-sm font-bold text-[#526052] md:flex">
           {navLinks.map((link) => (
-            <a key={link.href} className="rounded-full px-3 py-2 hover:bg-black/5" href={link.href}>
+            <Link key={link.href} className="rounded-full px-3 py-2 hover:bg-black/5" href={link.href}>
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="flex items-center gap-2">
@@ -94,14 +99,14 @@ function Header() {
         <div className="mx-auto mt-2 max-w-7xl rounded-[1.4rem] border border-white/60 bg-white/92 p-3 shadow-[0_18px_60px_rgba(23,35,27,0.12)] backdrop-blur-xl md:hidden">
           <div className="grid gap-1 text-sm font-bold text-[#526052]">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 className="rounded-2xl px-4 py-3 hover:bg-black/5"
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
           <div className="mt-2 border-t border-black/8 pt-2">
