@@ -5,11 +5,11 @@ import { brand } from "@/content/brand";
 export const metadata: Metadata = {
   title: `${brand.name} | Bhopal nonprofit for children, women, animals, and cleaner communities`,
   description:
-    "A premium new website for WeCare NGO in Bhopal, showing education, women empowerment, animal welfare, cleanliness work, stories, and ways to donate.",
+    "A premium new website for We Care Social Welfare Society in Bhopal, showing education, women empowerment, animal welfare, cleanliness work, stories, and ways to donate.",
   openGraph: {
     title: `${brand.name} | हम परवाह करते हैं`,
     description:
-      "Donate, volunteer, and see the real stories behind WeCare NGO's work in Bhopal.",
+      "Donate, volunteer, and see the real stories behind We Care Social Welfare Society's work in Bhopal.",
     images: ["/site-media/photos/01-c-ffn9xv27m.jpg"],
   },
 };

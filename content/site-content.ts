@@ -267,8 +267,8 @@ export const gallery = [
 
 export const faqs = [
   {
-    question: "Where does WeCare NGO work?",
-    answer: "WeCare NGO works in Bhopal, India, with programs around children, women, animals, and cleaner public spaces.",
+    question: "Where does We Care Social Welfare Society work?",
+    answer: "We Care Social Welfare Society works in Bhopal, India, with programs around children, women, animals, and cleaner public spaces.",
   },
   {
     question: "Can I volunteer if I only have a few hours a week?",
@@ -278,7 +278,7 @@ export const faqs = [
   {
     question: "Are the photos on this site real?",
     answer:
-      "Yes. The site uses real media downloaded from WeCare NGO's Instagram scrape. A few files failed to download, but the site only uses saved working media.",
+      "Yes. The site uses real media downloaded from We Care Social Welfare Society's Instagram scrape. A few files failed to download, but the site only uses saved working media.",
   },
   {
     question: "What is Bachpanshala?",

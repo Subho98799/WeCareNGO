@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, HeartHandshake, Play, Users, Instagram } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -34,22 +35,26 @@ function ButtonLink({
   variant?: "primary" | "secondary" | "ghost";
   className?: string;
 }) {
-  const btnClass =
+  const cls = `focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${
     variant === "primary"
       ? "bg-[var(--leaf)] text-white hover:bg-[var(--leaf-deep)]"
       : variant === "secondary"
         ? "bg-white/88 text-[var(--ink)] ring-1 ring-black/10 hover:bg-white"
-        : "bg-transparent text-[var(--ink)] hover:bg-black/5";
+        : "bg-transparent text-[var(--ink)] hover:bg-black/5"
+  } ${extraClass}`;
+
+  if (href.startsWith("http") || href.startsWith("mailto") || href.startsWith("tel")) {
+    return (
+      <a className={cls} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
 
   return (
-    <a
-      className={`focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${btnClass} ${extraClass}`}
-      href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noreferrer" : undefined}
-    >
+    <Link className={cls} href={href}>
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -76,7 +81,7 @@ function WorkSection() {
               <div className="relative aspect-[4/4.8] overflow-hidden bg-[#dfe6d6]">
                 <Image
                   src={program.image}
-                  alt={`${program.title} by WeCare NGO`}
+                  alt={`${program.title} by We Care Social Welfare Society`}
                   fill
                   sizes="(max-width: 1024px) 100vw, 25vw"
                   className="object-cover transition duration-700 group-hover:scale-110"
@@ -403,10 +408,10 @@ function GalleryPreview() {
       </div>
 
       <div className="mt-6 flex justify-center sm:hidden">
-        <a href="/gallery" className="focus-ring inline-flex items-center gap-1.5 text-sm font-bold text-[var(--leaf-deep)]">
+        <Link href="/gallery" className="focus-ring inline-flex items-center gap-1.5 text-sm font-bold text-[var(--leaf-deep)]">
           View Full Gallery
           <ArrowRight size={16} />
-        </a>
+        </Link>
       </div>
     </section>
   );

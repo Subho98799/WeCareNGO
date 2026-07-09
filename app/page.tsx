@@ -70,22 +70,26 @@ function ButtonLink({
   variant?: "primary" | "secondary" | "ghost";
   className?: string;
 }) {
-  const btnClass =
+  const cls = `focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${
     variant === "primary"
       ? "bg-[var(--leaf)] text-white hover:bg-[var(--leaf-deep)]"
       : variant === "secondary"
         ? "bg-white/88 text-[var(--ink)] ring-1 ring-black/10 hover:bg-white"
-        : "bg-transparent text-[var(--ink)] hover:bg-black/5";
+        : "bg-transparent text-[var(--ink)] hover:bg-black/5"
+  } ${extraClass}`;
+
+  if (href.startsWith("http") || href.startsWith("mailto") || href.startsWith("tel")) {
+    return (
+      <a className={cls} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    );
+  }
 
   return (
-    <a
-      className={`focus-ring inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-sm font-bold transition ${btnClass} ${extraClass}`}
-      href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel={href.startsWith("http") ? "noreferrer" : undefined}
-    >
+    <Link className={cls} href={href}>
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -99,11 +103,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 const navLinks = [
+  { href: "/about", label: "About" },
   { href: "/work", label: "Work" },
   { href: "/stories", label: "Stories" },
   { href: "/gallery", label: "Gallery" },
   { href: "/volunteer", label: "Volunteer" },
-  { href: "/about", label: "About" },
   { href: "/support", label: "Support Us" },
 ];
 
@@ -113,22 +117,22 @@ function Header() {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 px-3 py-3">
       <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/60 bg-white/78 px-3 py-2 shadow-[0_18px_60px_rgba(23,35,27,0.12)] backdrop-blur-xl">
-        <a className="focus-ring flex items-center gap-3 rounded-full pr-2" href="/">
+        <Link className="focus-ring flex items-center gap-3 rounded-full pr-2" href="/">
           <span className="relative h-14 w-14 overflow-hidden">
             <Image
               src="/site-media/photos/Logo.PNG"
-              alt="WeCare NGO logo"
+              alt="We Care Social Welfare Society logo"
               fill
               className="object-contain"
             />
           </span>
           <span className="hidden text-sm font-black sm:block">{brand.name}</span>
-        </a>
+        </Link>
         <div className="hidden items-center gap-1 text-sm font-bold text-[#526052] md:flex">
           {navLinks.map((link) => (
-            <a key={link.href} className="rounded-full px-3 py-2 hover:bg-black/5" href={link.href}>
+            <Link key={link.href} className="rounded-full px-3 py-2 hover:bg-black/5" href={link.href}>
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="flex items-center gap-2">
@@ -151,14 +155,14 @@ function Header() {
         <div className="mx-auto mt-2 max-w-7xl rounded-[1.4rem] border border-white/60 bg-white/92 p-3 shadow-[0_18px_60px_rgba(23,35,27,0.12)] backdrop-blur-xl md:hidden">
           <div className="grid gap-1 text-sm font-bold text-[#526052]">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 className="rounded-2xl px-4 py-3 hover:bg-black/5"
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </div>
           <div className="mt-2 border-t border-black/8 pt-2">
@@ -194,7 +198,7 @@ function Hero() {
             Care that shows up.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-7 text-[#4c594f] sm:text-lg">
-            WeCare NGO works with youth to improve the lives of children, women, animals, and public spaces in Bhopal.
+            We Care Social Welfare Society works with youth to improve the lives of children, women, animals, and public spaces in Bhopal.
           </p>
           <p className="mt-2 text-lg font-black text-[var(--leaf-deep)]">{brand.hindiLine}</p>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -245,7 +249,7 @@ function Hero() {
             <div className="absolute bottom-14 right-2 h-[38%] w-[46%] overflow-hidden rounded-[1.7rem] border-4 border-[var(--paper)] bg-[#dfe6d6] quiet-shadow">
               <Image
                 src="/site-media/photos/35-dkpitkvie-c.jpg"
-                alt="WeCare NGO menstrual hygiene drive in Bhopal"
+                alt="We Care Social Welfare Society menstrual hygiene drive in Bhopal"
                 fill
                 sizes="(max-width: 1024px) 46vw, 24vw"
                 className="object-cover"
@@ -314,7 +318,7 @@ function WhoWeAre() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-[#dfe6d6] media-shadow">
             <Image
               src="/site-media/photos/35-dkpitkvie-c.jpg"
-              alt="WeCare NGO menstrual hygiene drive in Bhopal"
+              alt="We Care Social Welfare Society menstrual hygiene drive in Bhopal"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
@@ -400,7 +404,7 @@ function Programs() {
                   <div className="relative aspect-[4/3] overflow-hidden bg-[#dfe6d6]">
                     <Image
                       src={program.image}
-                      alt={`${program.title} by WeCare NGO`}
+                      alt={`${program.title} by We Care Social Welfare Society`}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       className="object-cover transition duration-500 group-hover:scale-105"
@@ -464,7 +468,7 @@ function FeaturedStory() {
     },
     {
       src: "/site-media/photos/41-ddfmqrwvoxd.jpg",
-      quote: "A pair of shoes, a clean shirt, a smile \u2014 that is change you can see.",
+      quote: "A pair of shoes, a clean shirt, a smile that is change you can see.",
       name: "Volunteer Coordinator",
       role: "Children Support",
     },
@@ -628,9 +632,22 @@ function MediaViewer({
     setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   }, [items.length]);
 
+  const handleClose = useCallback(
+    (e?: React.MouseEvent | KeyboardEvent) => {
+      e?.preventDefault();
+      e?.stopPropagation();
+      onClose();
+    },
+    [onClose],
+  );
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+      }
       if (e.key === "ArrowLeft") goPrev();
       if (e.key === "ArrowRight") goNext();
     },
@@ -663,7 +680,7 @@ function MediaViewer({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/92 p-2 sm:p-4"
-      onClick={onClose}
+      onClick={handleClose}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
@@ -691,7 +708,7 @@ function MediaViewer({
 
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute -top-10 right-0 flex items-center gap-2 rounded-full bg-white/12 px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-white/80 backdrop-blur transition hover:bg-white/20 hover:text-white"
         >
           <X size={14} />
@@ -725,6 +742,17 @@ function MediaViewer({
 function GalleryMini() {
   const [items] = useState<GalleryItem[]>(() => [...gallery].reverse());
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const closeMediaViewer = useCallback(() => {
+    setSelectedIndex(null);
+  }, []);
+
+  useEffect(() => {
+    if (selectedIndex === null) return;
+    history.pushState(null, "");
+    window.addEventListener("popstate", closeMediaViewer);
+    return () => window.removeEventListener("popstate", closeMediaViewer);
+  }, [selectedIndex, closeMediaViewer]);
 
   if (items.length === 0) return null;
 
@@ -771,13 +799,13 @@ function GalleryMini() {
               Every moment matters.
             </h2>
           </div>
-          <a
+          <Link
             href="/gallery"
             className="focus-ring hidden shrink-0 items-center gap-1.5 rounded-full px-1 py-2 text-sm font-bold text-[var(--leaf-deep)] transition hover:translate-x-0.5 sm:inline-flex"
           >
             View Complete Gallery
             <ArrowRight size={16} />
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -823,13 +851,13 @@ function GalleryMini() {
       </div>
 
       <div className="mt-5 flex justify-center sm:hidden">
-        <a
+        <Link
           href="/gallery"
           className="focus-ring inline-flex items-center gap-1.5 text-sm font-bold text-[var(--leaf-deep)]"
         >
           View Complete Gallery
           <ArrowRight size={16} />
-        </a>
+        </Link>
       </div>
 
       {selectedIndex !== null && (

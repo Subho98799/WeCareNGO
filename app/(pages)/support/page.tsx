@@ -386,6 +386,7 @@ export default function SupportPage() {
   const [presetAmount, setPresetAmount] = useState("");
   return (
     <>
+      <div className="pt-16 lg:pt-20" />
       <DonationSection onSelectAmount={setPresetAmount} />
       <SupportSection presetAmount={presetAmount} />
       <TrustSection />

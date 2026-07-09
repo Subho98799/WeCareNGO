@@ -1,5 +1,5 @@
 export const brand = {
-  name: "WeCare NGO",
+  name: "We Care Social Welfare Society",
   hindiLine: "We care, and we show up.",
   city: "Bhopal, India",
   businessType: "Nonprofit organization",
